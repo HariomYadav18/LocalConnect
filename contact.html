@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - LocalConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans transition duration-300">
+
+  <!-- Navbar -->
+  <nav class="bg-white dark:bg-gray-800 frosted-dark shadow px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+    <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">LocalConnect</h1>
+    <div class="space-x-4">
+      <a href="index.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Home</a>
+      <a href="about.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition">About</a>
+      <button onclick="document.documentElement.classList.toggle('dark')" class="ml-4 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-md text-sm transition">Toggle Mode</button>
+    </div>
+  </nav>
+
+  <!-- Contact Section -->
+  <main class="max-w-4xl mx-auto p-6 mt-12 animate-fadeIn">
+    <h2 class="text-4xl font-bold text-blue-700 dark:text-blue-300 mb-8 text-center">Get in Touch</h2>
+    
+    <form class="space-y-6 bg-white dark:bg-gray-800 shadow-soft rounded-xl p-6 transition duration-300" onsubmit="event.preventDefault(); alert('Message sent!')">
+      <div>
+        <label for="name" class="block text-sm font-medium mb-1">Your Name</label>
+        <input id="name" type="text" required placeholder="Enter your name"
+          class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition" />
+      </div>
+      
+      <div>
+        <label for="email" class="block text-sm font-medium mb-1">Email</label>
+        <input id="email" type="email" required placeholder="you@example.com"
+          class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition" />
+      </div>
+
+      <div>
+        <label for="message" class="block text-sm font-medium mb-1">Message</label>
+        <textarea id="message" rows="4" required placeholder="Write your message here..."
+          class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition"></textarea>
+      </div>
+
+      <button type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md shadow-md hover:shadow-lg transition">Send Message</button>
+    </form>
+  </main>
+
+</body>
+</html>

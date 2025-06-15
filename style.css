@@ -1,0 +1,110 @@
+/* Font smoothing and base transitions */
+body {
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dark mode base */
+.dark {
+  background-color: #111827;
+  color: #F9FAFB;
+}
+
+/* Toggle button */
+.toggle-dark {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Button glow on hover */
+button:hover {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Shop card hover animation */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Animate fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out both;
+}
+
+/* Bounce-in animation */
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-bounceIn {
+  animation: bounceIn 0.5s ease-out both;
+}
+
+/* Bluish theme colors */
+.bg-primary {
+  background-color: #3B82F6;
+}
+
+.text-primary {
+  color: #3B82F6;
+}
+
+.dark .bg-primary {
+  background-color: #60A5FA;
+}
+
+.dark .text-primary {
+  color: #60A5FA;
+}
+
+/* Additional utility enhancements */
+.rounded-xl {
+  border-radius: 1.25rem;
+}
+
+.shadow-soft {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.transition {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Frosted dark navbar suggestion */
+.dark .frosted-dark {
+  background-color: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+/* Accessibility: Focus ring for inputs/buttons */
+:focus-visible {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}

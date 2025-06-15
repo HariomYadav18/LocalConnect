@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LocalConnect - Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            accent: '#60A5FA',
+            muted: '#F3F4F6',
+            darkBg: '#111827',
+            lightBg: '#F9FAFB'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          },
+          animation: {
+            fadeIn: 'fadeIn 0.5s ease-in-out',
+            pulseIn: 'pulseIn 1s ease-in-out'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            pulseIn: {
+              '0%': { transform: 'scale(0.95)' },
+              '50%': { transform: 'scale(1.05)' },
+              '100%': { transform: 'scale(1)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-lightBg dark:bg-darkBg text-gray-800 dark:text-gray-100 font-sans transition duration-300">
+
+  <!-- Navbar -->
+  <nav class="bg-white dark:bg-gray-900 shadow px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+    <div class="flex items-center space-x-4">
+      <h1 class="text-2xl font-bold text-primary dark:text-accent animate-pulse">LocalConnect</h1>
+      <a href="index.html" class="text-sm hover:text-primary dark:hover:text-accent">Home</a>
+      <a href="login.html" class="text-sm hover:text-primary dark:hover:text-accent">Login</a>
+      <a href="about.html" class="text-sm hover:text-primary dark:hover:text-accent">About</a>
+      <a href="contact.html" class="text-sm hover:text-primary dark:hover:text-accent">Contact</a>
+    </div>
+    <button onclick="toggleDarkMode()" class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-1 rounded-md text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+      Toggle Mode
+    </button>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="text-center py-20 px-4 bg-gradient-to-r from-blue-100 via-indigo-200 to-pink-100 dark:from-gray-800 dark:to-gray-900">
+    <h2 class="text-4xl sm:text-5xl font-bold mb-4 text-gray-800 dark:text-white animate-bounce">
+      Discover Local Wonders 🛍️
+    </h2>
+    <p class="text-lg text-gray-600 dark:text-gray-300 mb-6 max-w-xl mx-auto animate-fadeIn">
+      Fresh groceries, electronics, books & more – delivered from your favorite nearby shops!
+    </p>
+    <a href="#shops" class="px-6 py-3 bg-primary text-white rounded-lg shadow hover:bg-blue-700 transition text-lg animate-pulseIn">
+      Explore Shops
+    </a>
+  </section>
+
+  <!-- Features -->
+  <section class="max-w-6xl mx-auto py-12 px-4 grid md:grid-cols-3 gap-6">
+    <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/883/883407.png" class="h-16 mx-auto mb-4" alt="Delivery">
+      <h4 class="text-lg font-bold text-primary mb-2">Fast Delivery</h4>
+      <p class="text-gray-600 dark:text-gray-300">Under 60 minutes from local vendors!</p>
+    </div>
+    <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/4202/4202843.png" class="h-16 mx-auto mb-4" alt="Verified">
+      <h4 class="text-lg font-bold text-primary mb-2">Verified Shops</h4>
+      <p class="text-gray-600 dark:text-gray-300">We partner with trusted, high-quality sellers.</p>
+    </div>
+    <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/2956/2956796.png" class="h-16 mx-auto mb-4" alt="Secure">
+      <h4 class="text-lg font-bold text-primary mb-2">Secure Payments</h4>
+      <p class="text-gray-600 dark:text-gray-300">Encrypted, fast, and hassle-free checkout process.</p>
+    </div>
+  </section>
+
+  <!-- Shop Section -->
+  <section id="shops" class="max-w-6xl mx-auto px-4 py-12">
+    <div class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <input id="searchInput" type="text" placeholder="Search shops..." class="w-full sm:w-1/2 px-4 py-2 rounded border dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
+      <select id="categoryFilter" class="w-full sm:w-1/4 px-4 py-2 rounded border dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+        <option value="">All Categories</option>
+      </select>
+    </div>
+    <div id="shopContainer" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="bg-muted dark:bg-gray-900 py-12">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h3 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">What Our Users Say</h3>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+          <p class="italic">"Absolutely love how quick and easy it is to shop from my favorite kirana store!"</p>
+          <h4 class="mt-4 font-semibold text-primary">— Priya S.</h4>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+          <p class="italic">"This app helped my father's store go digital. Thank you, LocalConnect!"</p>
+          <h4 class="mt-4 font-semibold text-primary">— Aman Y.</h4>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+          <p class="italic">"The dark mode is so slick! And I found great deals at nearby electronics stores."</p>
+          <h4 class="mt-4 font-semibold text-primary">— Neha R.</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="bg-white dark:bg-gray-800 py-12 px-4 text-center">
+    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Stay Updated</h3>
+    <p class="text-gray-600 dark:text-gray-300 mb-6">Subscribe to our newsletter for the latest deals and shop updates.</p>
+    <div class="max-w-xl mx-auto flex flex-col sm:flex-row gap-4 justify-center">
+      <input type="email" placeholder="Your email address" class="flex-1 px-4 py-2 rounded border dark:border-gray-600 dark:bg-gray-900 dark:text-white" />
+      <button class="bg-primary text-white px-6 py-2 rounded hover:bg-blue-700 transition">Subscribe</button>
+    </div>
+  </section>
+
+  <!-- Floating Help Button -->
+  <button title="Need help?" class="fixed bottom-6 right-6 bg-primary hover:bg-blue-700 text-white p-3 rounded-full shadow-lg z-50">
+    💬
+  </button>
+
+  <!-- Footer -->
+  <footer class="bg-white dark:bg-gray-900 py-6 text-center text-sm text-gray-600 dark:text-gray-400">
+    <p>&copy; 2025 LocalConnect. Made with ❤️ to support local businesses.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('localconnect_theme', isDark ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('localconnect_theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+  <script src="shops.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

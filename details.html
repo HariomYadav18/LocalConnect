@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop Details - LocalConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            accent: '#60A5FA',
+            muted: '#F3F4F6',
+            darkBg: '#111827',
+            lightBg: '#F9FAFB'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          },
+          animation: {
+            fadeIn: 'fadeIn 0.5s ease-in-out'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="bg-lightBg dark:bg-darkBg text-gray-800 dark:text-gray-100 font-sans transition duration-300">
+
+  <!-- Navbar -->
+  <nav class="bg-white dark:bg-gray-800 shadow px-6 py-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-primary dark:text-accent animate-bounce">LocalConnect</h1>
+    <button onclick="document.documentElement.classList.toggle('dark')"
+      class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-1 rounded-md text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+      Toggle Mode
+    </button>
+  </nav>
+
+  <!-- Dynamic Shop Info -->
+  <main class="max-w-4xl mx-auto p-6">
+    <div id="shopDetails" class="animate-fadeIn"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white dark:bg-gray-800 py-6 mt-12 text-center text-sm text-gray-600 dark:text-gray-400">
+    <p>&copy; 2025 LocalConnect. Made with ❤️ to support local businesses.</p>
+  </footer>
+
+  <script>
+    const shop = JSON.parse(localStorage.getItem('selectedShop'));
+    const container = document.getElementById('shopDetails');
+
+    if (!shop) {
+      container.innerHTML = `
+        <div class="text-center text-gray-600 dark:text-gray-300">
+          <p>Shop data not found. Please return to <a href="index.html" class="text-primary underline">Home</a>.</p>
+        </div>
+      `;
+    } else {
+      container.innerHTML = `
+        <div class="bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-hidden">
+          <img src="${shop.image}" alt="${shop.name}" class="w-full h-64 object-cover" />
+          <div class="p-6">
+            <h2 class="text-3xl font-bold text-indigo-700 dark:text-indigo-300 mb-2">${shop.name}</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Best quality products delivered fresh from your local store.</p>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <p class="font-semibold text-gray-700 dark:text-gray-200 mb-1">Category:</p>
+                <p>${shop.category}</p>
+              </div>
+              <div>
+                <p class="font-semibold text-gray-700 dark:text-gray-200 mb-1">Location:</p>
+                <p>${shop.location}</p>
+              </div>
+            </div>
+
+            <div class="mt-6 flex flex-wrap gap-4">
+              <a href="cart.html"
+                class="bg-primary text-white px-6 py-2 rounded-md shadow hover:bg-blue-700 transition animate-pulseIn">
+                Add to Cart
+              </a>
+              <a href="index.html"
+                class="bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white px-6 py-2 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition">
+                Back to Shops
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

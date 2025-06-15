@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart - LocalConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            accent: '#60A5FA',
+            darkBg: '#111827'
+          },
+          animation: {
+            fadeIn: 'fadeIn 0.4s ease-in-out',
+            spinSlow: 'spin 1.2s linear infinite'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 dark:bg-darkBg text-gray-800 dark:text-gray-100 font-sans transition duration-300">
+
+  <!-- Navbar -->
+  <nav class="bg-white dark:bg-gray-800 shadow px-6 py-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-primary dark:text-accent">LocalConnect</h1>
+    <div class="space-x-4">
+      <a href="index.html" class="text-sm font-medium hover:text-primary dark:hover:text-accent transition">Home</a>
+      <a href="details.html" class="text-sm font-medium hover:text-primary dark:hover:text-accent transition">Shop More</a>
+      <button onclick="document.documentElement.classList.toggle('dark')"
+        class="ml-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-1 rounded-md text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+        Toggle Mode
+      </button>
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-6 py-10 animate-fadeIn">
+    <h2 class="text-3xl font-bold text-primary dark:text-accent mb-6">Your Cart</h2>
+
+    <!-- Cart Table -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden mb-6">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead class="bg-indigo-50 dark:bg-gray-700">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Product</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Quantity</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Price</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Action</th>
+          </tr>
+        </thead>
+        <tbody id="cart-body" class="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
+          <!-- JS will populate this -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Total and Clear Cart -->
+    <div class="flex justify-between items-center mb-6">
+      <p id="total-price" class="text-lg font-semibold text-gray-700 dark:text-gray-200">Total: ₹0</p>
+      <button id="clear-cart" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow transition">Clear Cart</button>
+    </div>
+
+    <!-- Request Form -->
+    <h3 class="text-xl font-semibold mb-4">Request Details</h3>
+    <form id="checkout-form" class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-4 relative">
+      <div>
+        <label class="block text-sm font-medium mb-1">Your Name</label>
+        <input name="name" type="text" class="w-full border border-gray-300 dark:border-gray-600 rounded px-4 py-2 bg-white dark:bg-gray-700 dark:text-white" required />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Delivery Address</label>
+        <textarea name="address" rows="3" class="w-full border border-gray-300 dark:border-gray-600 rounded px-4 py-2 bg-white dark:bg-gray-700 dark:text-white" required></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Phone Number</label>
+        <input name="phone" type="tel" class="w-full border border-gray-300 dark:border-gray-600 rounded px-4 py-2 bg-white dark:bg-gray-700 dark:text-white" required />
+      </div>
+
+      <button id="submit-btn" type="submit" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded transition flex items-center justify-center gap-2">
+        <span>Submit Request</span>
+        <svg id="loading-spinner" class="hidden animate-spin h-5 w-5 text-white" viewBox="0 0 24 24" fill="none">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z" />
+        </svg>
+      </button>
+    </form>
+  </main>
+
+  <!-- Embedded JS -->
+  <script>
+    const cartBody = document.getElementById("cart-body");
+    const totalPriceEl = document.getElementById("total-price");
+    const spinner = document.getElementById("loading-spinner");
+    const submitBtn = document.getElementById("submit-btn");
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const shops = JSON.parse(localStorage.getItem("shops")) || [];
+
+    function saveCart() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    function renderCartItems() {
+      cartBody.innerHTML = "";
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-500 dark:text-gray-400">Your cart is empty.</td></tr>`;
+        totalPriceEl.textContent = "Total: ₹0";
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        const shop = shops.find(s => s.id === item.shopId);
+        const product = shop?.products?.[item.productIndex];
+
+        if (product && shop) {
+          const subtotal = product.price * item.qty;
+          total += subtotal;
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-medium text-gray-900 dark:text-gray-100">${product.name}</div>
+              <div class="text-sm text-gray-500 dark:text-gray-400">${shop.name}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <div class="flex items-center gap-2">
+                <button class="decrease bg-gray-200 px-2 py-1 rounded hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600" data-index="${index}">−</button>
+                <span>${item.qty}</span>
+                <button class="increase bg-gray-200 px-2 py-1 rounded hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600" data-index="${index}">+</button>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">₹${subtotal}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <button class="remove text-red-600 hover:text-red-800 font-semibold" data-index="${index}">Remove</button>
+            </td>
+          `;
+          cartBody.appendChild(row);
+        }
+      });
+
+      totalPriceEl.textContent = `Total: ₹${total.toFixed(2)}`;
+      attachEventListeners();
+    }
+
+    function attachEventListeners() {
+      document.querySelectorAll(".increase").forEach(btn =>
+        btn.addEventListener("click", e => {
+          const index = +e.target.dataset.index;
+          cart[index].qty++;
+          saveCart();
+          renderCartItems();
+        })
+      );
+
+      document.querySelectorAll(".decrease").forEach(btn =>
+        btn.addEventListener("click", e => {
+          const index = +e.target.dataset.index;
+          if (cart[index].qty > 1) {
+            cart[index].qty--;
+          } else {
+            cart.splice(index, 1);
+          }
+          saveCart();
+          renderCartItems();
+        })
+      );
+
+      document.querySelectorAll(".remove").forEach(btn =>
+        btn.addEventListener("click", e => {
+          const index = +e.target.dataset.index;
+          cart.splice(index, 1);
+          saveCart();
+          renderCartItems();
+        })
+      );
+    }
+
+    document.getElementById("clear-cart").addEventListener("click", () => {
+      cart = [];
+      saveCart();
+      renderCartItems();
+    });
+
+    document.getElementById("checkout-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      spinner.classList.remove("hidden");
+      submitBtn.disabled = true;
+
+      setTimeout(() => {
+        spinner.classList.add("hidden");
+        submitBtn.disabled = false;
+        localStorage.removeItem("cart");
+        window.location.href = "success.html";
+      }, 1500);
+    });
+
+    renderCartItems();
+  </script>
+</body>
+</html>
