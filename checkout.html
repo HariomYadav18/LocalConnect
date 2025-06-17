@@ -55,15 +55,15 @@
     <form id="checkout-form" class="bg-white dark:bg-gray-800 p-6 rounded shadow space-y-4">
       <div>
         <label class="block mb-1 text-sm font-medium">Name</label>
-        <input required id="name" class="w-full px-4 py-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600" />
+        <input required name="name" class="w-full px-4 py-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600" />
       </div>
       <div>
         <label class="block mb-1 text-sm font-medium">Address</label>
-        <textarea required id="address" class="w-full px-4 py-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600"></textarea>
+        <textarea required name="address" class="w-full px-4 py-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600"></textarea>
       </div>
       <div>
         <label class="block mb-1 text-sm font-medium">Phone</label>
-        <input type="tel" required id="phone" class="w-full px-4 py-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600" />
+        <input type="tel" required name="phone" class="w-full px-4 py-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600" />
       </div>
       <button type="submit" class="w-full bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded">Place Order</button>
     </form>
@@ -71,6 +71,7 @@
 
   <script>
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
     const cartBody = document.getElementById("cart-body");
     const totalPriceEl = document.getElementById("total-price");
 
@@ -89,6 +90,7 @@
       cart.forEach((item, index) => {
         const subtotal = item.price * item.qty;
         total += subtotal;
+
         const row = document.createElement("tr");
         row.innerHTML = `
           <td class="px-6 py-4">${item.name}</td>
@@ -99,6 +101,7 @@
         cartBody.appendChild(row);
       });
       totalPriceEl.textContent = `Total: ₹${total}`;
+      attachEvents();
     }
 
     function attachEvents() {
@@ -119,25 +122,22 @@
 
     document.getElementById("checkout-form").onsubmit = e => {
       e.preventDefault();
-      const name = document.getElementById("name").value;
-      const address = document.getElementById("address").value;
-      const phone = document.getElementById("phone").value;
-
-      // Save order snapshot
+      const formData = new FormData(e.target);
       const orderData = {
-        name,
-        address,
-        phone,
-        cart,
+        name: formData.get("name"),
+        address: formData.get("address"),
+        phone: formData.get("phone"),
+        items: cart,
         total: cart.reduce((sum, item) => sum + item.price * item.qty, 0)
       };
       localStorage.setItem("orderSummary", JSON.stringify(orderData));
       localStorage.removeItem("cart");
-      window.location.href = "success.html";
+      setTimeout(() => {
+        window.location.href = "success.html";
+      }, 100);
     };
 
     renderCartItems();
-    attachEvents();
   </script>
 </body>
 </html>

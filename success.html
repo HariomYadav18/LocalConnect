@@ -15,20 +15,6 @@
             accent: '#60A5FA',
             darkBg: '#111827'
           },
-          animation: {
-            fadeIn: 'fadeIn 0.4s ease-in-out',
-            bounceOnce: 'bounceOnce 1s ease'
-          },
-          keyframes: {
-            fadeIn: {
-              '0%': { opacity: '0', transform: 'translateY(10px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' }
-            },
-            bounceOnce: {
-              '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-10px)' }
-            }
-          },
           fontFamily: {
             sans: ['Inter', 'sans-serif']
           }
@@ -39,60 +25,50 @@
 </head>
 <body class="bg-gray-50 dark:bg-darkBg text-gray-800 dark:text-gray-100 font-sans transition duration-300">
 
-  <!-- Nav -->
   <nav class="bg-white dark:bg-gray-800 shadow px-6 py-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold text-primary dark:text-accent">LocalConnect</h1>
-    <div class="space-x-4">
-      <a href="index.html" class="text-sm font-medium hover:text-primary dark:hover:text-accent transition">Home</a>
-      <button onclick="document.documentElement.classList.toggle('dark')"
-        class="ml-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-1 rounded-md text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-        Toggle Mode
-      </button>
-    </div>
+    <a href="index.html" class="text-sm font-medium hover:text-primary dark:hover:text-accent transition">Home</a>
   </nav>
 
-  <!-- Main -->
-  <main class="max-w-3xl mx-auto px-6 py-20 text-center animate-fadeIn">
+  <main class="max-w-2xl mx-auto px-6 py-16 text-center animate-fadeIn">
     <svg class="mx-auto mb-6 w-20 h-20 text-green-500 animate-bounceOnce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
     </svg>
     <h2 class="text-3xl font-bold mb-4 text-primary dark:text-accent">Thank You!</h2>
-    <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">Your order has been placed successfully. Here’s a summary:</p>
+    <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">Your order has been placed successfully.</p>
 
-    <div id="order-summary" class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-left max-w-xl mx-auto mb-8"></div>
+    <div id="order-summary" class="bg-white dark:bg-gray-800 p-6 rounded shadow text-left"></div>
 
-    <a href="index.html" class="inline-block bg-primary hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition">Return to Home</a>
+    <a href="index.html" class="mt-6 inline-block bg-primary hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition">Return to Home</a>
   </main>
 
   <script>
-    const summary = JSON.parse(localStorage.getItem("orderSummary"));
-    const container = document.getElementById("order-summary");
+    const summaryEl = document.getElementById("order-summary");
+    const order = JSON.parse(localStorage.getItem("orderSummary"));
 
-    if (!summary) {
-      container.innerHTML = `<p class="text-gray-500">No order summary found.</p>`;
+    if (!order || !order.items || order.items.length === 0) {
+      summaryEl.innerHTML = `<p class="text-gray-500 text-center">No order summary found.</p>`;
     } else {
-      let itemsHtml = summary.cart.map(item => `
-        <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-600">
-          <div>
-            <p class="font-medium">${item.name}</p>
-            <p class="text-sm text-gray-500">Qty: ${item.qty}</p>
-          </div>
-          <div class="text-right">
-            ₹${item.price * item.qty}
-          </div>
+      const itemsHTML = order.items.map(item => `
+        <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
+          <span>${item.name} × ${item.qty}</span>
+          <span>₹${item.qty * item.price}</span>
         </div>
       `).join("");
 
-      container.innerHTML = `
-        <p class="mb-2"><strong>Name:</strong> ${summary.name}</p>
-        <p class="mb-2"><strong>Address:</strong> ${summary.address}</p>
-        <p class="mb-2"><strong>Phone:</strong> ${summary.phone}</p>
-        <hr class="my-4">
-        <h3 class="text-lg font-semibold mb-2">Order Summary:</h3>
-        ${itemsHtml}
-        <hr class="my-4">
-        <p class="text-right font-bold text-lg">Total: ₹${summary.total}</p>
+      summaryEl.innerHTML = `
+        <h3 class="text-xl font-semibold mb-2">Order Summary</h3>
+        <p><strong>Name:</strong> ${order.name}</p>
+        <p><strong>Address:</strong> ${order.address}</p>
+        <p><strong>Phone:</strong> ${order.phone}</p>
+        <div class="mt-4">${itemsHTML}</div>
+        <div class="flex justify-between mt-4 font-bold text-lg">
+          <span>Total:</span>
+          <span>₹${order.total}</span>
+        </div>
       `;
+
+      // Optional cleanup
       localStorage.removeItem("orderSummary");
     }
   </script>
