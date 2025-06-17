@@ -75,24 +75,29 @@
       <button id="clear-cart" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow transition">Clear Cart</button>
     </div>
 
-    <!-- Request Form -->
-    <h3 class="text-xl font-semibold mb-4">Request Details</h3>
-    <form id="checkout-form" class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-4 relative">
+    <!-- Confirm Order Button -->
+    <div class="mb-6">
+      <button id="confirm-order" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded transition">Confirm Order</button>
+    </div>
+
+    <!-- Checkout Form -->
+    <form id="checkout-form" class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-4 hidden transition duration-300">
+      <h3 class="text-xl font-semibold mb-4">Place Your Order</h3>
       <div>
         <label class="block text-sm font-medium mb-1">Your Name</label>
-        <input name="name" type="text" class="w-full border border-gray-300 dark:border-gray-600 rounded px-4 py-2 bg-white dark:bg-gray-700 dark:text-white" required />
+        <input name="name" type="text" required class="w-full border border-gray-300 dark:border-gray-600 rounded px-4 py-2 bg-white dark:bg-gray-700 dark:text-white" />
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Delivery Address</label>
-        <textarea name="address" rows="3" class="w-full border border-gray-300 dark:border-gray-600 rounded px-4 py-2 bg-white dark:bg-gray-700 dark:text-white" required></textarea>
+        <textarea name="address" rows="3" required class="w-full border border-gray-300 dark:border-gray-600 rounded px-4 py-2 bg-white dark:bg-gray-700 dark:text-white"></textarea>
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Phone Number</label>
-        <input name="phone" type="tel" class="w-full border border-gray-300 dark:border-gray-600 rounded px-4 py-2 bg-white dark:bg-gray-700 dark:text-white" required />
+        <input name="phone" type="tel" required class="w-full border border-gray-300 dark:border-gray-600 rounded px-4 py-2 bg-white dark:bg-gray-700 dark:text-white" />
       </div>
 
       <button id="submit-btn" type="submit" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded transition flex items-center justify-center gap-2">
-        <span>Submit Request</span>
+        <span>Place Order</span>
         <svg id="loading-spinner" class="hidden animate-spin h-5 w-5 text-white" viewBox="0 0 24 24" fill="none">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z" />
@@ -101,12 +106,12 @@
     </form>
   </main>
 
-  <!-- Embedded JS -->
   <script>
     const cartBody = document.getElementById("cart-body");
     const totalPriceEl = document.getElementById("total-price");
     const spinner = document.getElementById("loading-spinner");
     const submitBtn = document.getElementById("submit-btn");
+    const checkoutForm = document.getElementById("checkout-form");
 
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     const shops = JSON.parse(localStorage.getItem("shops")) || [];
@@ -209,6 +214,10 @@
         localStorage.removeItem("cart");
         window.location.href = "success.html";
       }, 1500);
+    });
+
+    document.getElementById("confirm-order").addEventListener("click", () => {
+      checkoutForm.classList.toggle("hidden");
     });
 
     renderCartItems();
