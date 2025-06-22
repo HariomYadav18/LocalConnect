@@ -64,9 +64,7 @@
             <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">Action</th>
           </tr>
         </thead>
-        <tbody id="cart-body" class="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
-          <!-- JS will populate -->
-        </tbody>
+        <tbody id="cart-body" class="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700"></tbody>
       </table>
     </div>
 
@@ -197,12 +195,27 @@
       spinner.classList.remove("hidden");
       submitBtn.disabled = true;
 
+      const formData = new FormData(e.target);
+      const orderData = {
+        name: formData.get("name"),
+        address: formData.get("address"),
+        phone: formData.get("phone"),
+        items: cart.map(item => ({
+          name: item.productName || item.name,
+          qty: item.qty,
+          price: item.price
+        })),
+        total: cart.reduce((sum, item) => sum + item.price * item.qty, 0)
+      };
+
+      localStorage.setItem("orderSummary", JSON.stringify(orderData));
+      localStorage.removeItem("cart");
+
       setTimeout(() => {
         spinner.classList.add("hidden");
         submitBtn.disabled = false;
-        localStorage.removeItem("cart");
         window.location.href = "success.html";
-      }, 1500);
+      }, 1000);
     });
 
     renderCartItems();

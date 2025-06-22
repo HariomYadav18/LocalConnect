@@ -69,75 +69,96 @@
     </form>
   </main>
 
-  <script>
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+ <script>
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    const cartBody = document.getElementById("cart-body");
-    const totalPriceEl = document.getElementById("total-price");
+  const cartBody = document.getElementById("cart-body");
+  const totalPriceEl = document.getElementById("total-price");
 
-    function saveCart() {
-      localStorage.setItem("cart", JSON.stringify(cart));
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
+
+  function renderCartItems() {
+    cartBody.innerHTML = "";
+    let total = 0;
+
+    if (cart.length === 0) {
+      cartBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-500">Cart is empty.</td></tr>`;
+      totalPriceEl.textContent = "Total: ₹0";
+      return;
     }
 
-    function renderCartItems() {
-      cartBody.innerHTML = "";
-      let total = 0;
-      if (cart.length === 0) {
-        cartBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-500">Cart is empty.</td></tr>`;
-        totalPriceEl.textContent = "Total: ₹0";
-        return;
-      }
-      cart.forEach((item, index) => {
-        const subtotal = item.price * item.qty;
-        total += subtotal;
+    cart.forEach((item, index) => {
+      const subtotal = item.price * item.qty;
+      total += subtotal;
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td class="px-6 py-4">${item.name}</td>
-          <td class="px-6 py-4">${item.qty}</td>
-          <td class="px-6 py-4">₹${subtotal}</td>
-          <td class="px-6 py-4"><button class="text-red-500 remove" data-index="${index}">Remove</button></td>
-        `;
-        cartBody.appendChild(row);
-      });
-      totalPriceEl.textContent = `Total: ₹${total}`;
-      attachEvents();
-    }
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="px-6 py-4">
+          ${item.productName || item.name}
+          <div class="text-sm text-gray-500">${item.shopName || ''}</div>
+        </td>
+        <td class="px-6 py-4">${item.qty}</td>
+        <td class="px-6 py-4">₹${subtotal}</td>
+        <td class="px-6 py-4"><button class="text-red-500 remove" data-index="${index}">Remove</button></td>
+      `;
+      cartBody.appendChild(row);
+    });
 
-    function attachEvents() {
-      document.querySelectorAll(".remove").forEach(btn => {
-        btn.onclick = e => {
-          cart.splice(e.target.dataset.index, 1);
-          saveCart();
-          renderCartItems();
-        };
-      });
-    }
+    totalPriceEl.textContent = `Total: ₹${total.toFixed(2)}`;
+    attachEvents();
+  }
 
-    document.getElementById("clear-cart").onclick = () => {
-      cart = [];
-      saveCart();
-      renderCartItems();
-    };
-
-    document.getElementById("checkout-form").onsubmit = e => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const orderData = {
-        name: formData.get("name"),
-        address: formData.get("address"),
-        phone: formData.get("phone"),
-        items: cart,
-        total: cart.reduce((sum, item) => sum + item.price * item.qty, 0)
+  function attachEvents() {
+    document.querySelectorAll(".remove").forEach(btn => {
+      btn.onclick = e => {
+        cart.splice(e.target.dataset.index, 1);
+        saveCart();
+        renderCartItems();
       };
-      localStorage.setItem("orderSummary", JSON.stringify(orderData));
-      localStorage.removeItem("cart");
-      setTimeout(() => {
-        window.location.href = "checkout-success.html";
-      }, 100);
+    });
+  }
+
+  document.getElementById("clear-cart").onclick = () => {
+    cart = [];
+    saveCart();
+    renderCartItems();
+  };
+
+  document.getElementById("checkout-form").onsubmit = e => {
+    e.preventDefault();
+
+    if (cart.length === 0) {
+      alert("Cart is empty");
+      return;
+    }
+
+    const formData = new FormData(e.target);
+    const orderData = {
+      name: formData.get("name"),
+      address: formData.get("address"),
+      phone: formData.get("phone"),
+      items: cart.map(item => ({
+        name: item.productName || item.name,
+        shop: item.shopName || '',
+        qty: item.qty,
+        price: item.price
+      })),
+      total: cart.reduce((sum, item) => sum + item.price * item.qty, 0)
     };
 
-    renderCartItems();
-  </script>
+    localStorage.setItem("orderSummary", JSON.stringify(orderData));
+    localStorage.removeItem("cart");
+
+    setTimeout(() => {
+      window.location.href = "checkout-success.html";
+    }, 200);
+  };
+
+  renderCartItems();
+</script>
+
+
 </body>
 </html>
