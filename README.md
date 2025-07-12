@@ -258,7 +258,7 @@ This project is developed for academic purposes as a final year Computer Science
 ## 📞 **Contact**
 
 For project-related inquiries:
-- **Email**: project@localconnect.edu
+- **Email**: hariomydv1844@gmail.com
 - **GitHub**: [Project Repository]
 - **Documentation**: [Project Wiki]
 
