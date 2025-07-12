@@ -11,48 +11,109 @@
       theme: {
         extend: {
           colors: {
-            primary: '#3B82F6',
-            accent: '#60A5FA',
-            darkBg: '#111827'
+            primary: '#FF6B35',
+            secondary: '#F7931E',
+            accent: '#FFD23F',
+            success: '#2ECC71',
+            warning: '#F39C12',
+            error: '#E74C3C',
+            muted: '#F8F9FA',
+            darkBg: '#1A1A1A',
+            darkCard: '#2D2D2D',
+            darkBorder: '#404040'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Poppins', 'system-ui', 'sans-serif']
           },
           animation: {
-            fadeIn: 'fadeIn 0.4s ease-in-out',
+            fadeIn: 'fadeIn 0.6s ease-out',
+            slideUp: 'slideUp 0.5s ease-out',
+            bounceIn: 'bounceIn 0.8s ease-out',
+            pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
           },
           keyframes: {
             fadeIn: {
-              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
               '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            bounceIn: {
+              '0%': { opacity: '0', transform: 'scale(0.3)' },
+              '50%': { opacity: '1', transform: 'scale(1.05)' },
+              '70%': { transform: 'scale(0.9)' },
+              '100%': { opacity: '1', transform: 'scale(1)' }
             }
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif']
           }
         }
       }
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 dark:bg-darkBg text-gray-800 dark:text-gray-100 font-sans transition duration-300">
+<body class="bg-gray-50 dark:bg-darkBg text-gray-900 dark:text-gray-100 font-sans transition-all duration-300">
 
-  <!-- Navbar -->
-  <nav class="bg-white dark:bg-gray-800 shadow px-6 py-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary dark:text-accent">LocalConnect</h1>
-    <div class="space-x-4">
-      <a href="index.html" class="text-sm font-medium hover:text-primary dark:hover:text-accent transition">Home</a>
-      <a href="cart.html" class="text-sm font-medium hover:text-primary dark:hover:text-accent transition">Cart</a>
-      <a href="about.html" class="text-sm font-medium hover:text-primary dark:hover:text-accent transition">About</a>
-      <a href="contact.html" class="text-sm font-medium hover:text-primary dark:hover:text-accent transition">Contact</a>
-      <button onclick="document.documentElement.classList.toggle('dark')"
-        class="ml-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-1 rounded-md text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-        Toggle Mode
-      </button>
+  <!-- Enhanced Navbar -->
+  <nav class="bg-white/95 dark:bg-darkCard/95 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-darkBorder sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <a href="index.html" class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg">
+              <i class="fas fa-store text-white text-lg"></i>
+            </div>
+            <h1 class="text-2xl font-display font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              LocalConnect
+            </h1>
+          </a>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
+            <i class="fas fa-home text-sm"></i>
+            <span>Home</span>
+          </a>
+          <a href="cart.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
+            <i class="fas fa-shopping-cart text-sm"></i>
+            <span>Cart</span>
+          </a>
+          <a href="about.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
+            <i class="fas fa-info-circle text-sm"></i>
+            <span>About</span>
+          </a>
+        </div>
+
+        <!-- Right Side Actions -->
+        <div class="flex items-center space-x-4">
+          <!-- Cart Icon with Badge -->
+          <a href="cart.html" class="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent transition-colors duration-200">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="cart-badge" class="absolute -top-1 -right-1 bg-error text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
+          </a>
+          
+          <!-- Dark Mode Toggle -->
+          <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-100 dark:bg-darkBorder hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <i id="theme-icon" class="fas fa-moon text-gray-700 dark:text-gray-300"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <main class="max-w-5xl mx-auto px-6 py-10 animate-fadeIn">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fadeIn">
     <div id="shop-container"></div>
   </main>
+
+  <!-- Floating Action Button -->
+  <button id="fab" title="Need help?" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full shadow-lg z-50 flex items-center justify-center transition-all duration-300 hover:scale-110">
+    <i class="fas fa-comments text-xl"></i>
+  </button>
 
   <script>
     const shops = [
@@ -63,18 +124,27 @@
         location: "Delhi",
         rating: 4.3,
         image: "./assets/sharma-kirana.jpg",
+        description: "Your trusted neighborhood grocery store with fresh produce and daily essentials. Serving the community for over 15 years with quality products and excellent service.",
+        deliveryTime: "20-30 min",
+        minOrder: "₹50",
         products: [
           {
-            name: "Rice",
+            name: "Premium Basmati Rice",
             price: 55,
-            description: "Premium Basmati Rice 1kg",
-            image: "./assets/rice.jpg"
+            originalPrice: 65,
+            description: "Premium quality Basmati Rice, perfect for biryanis and pulao. 1kg pack.",
+            image: "./assets/rice.jpg",
+            inStock: true,
+            discount: 15
           },
           {
-            name: "Wheat Flour",
+            name: "Fresh Chakki Atta",
             price: 45,
-            description: "Fresh Chakki Atta 1kg",
-            image: "./assets/wheat-flour.jpg"
+            originalPrice: 50,
+            description: "Freshly ground whole wheat flour, perfect for rotis and parathas. 1kg pack.",
+            image: "./assets/wheat-flour.jpg",
+            inStock: true,
+            discount: 10
           }
         ]
       },
@@ -85,18 +155,27 @@
         location: "Mumbai",
         rating: 4.7,
         image: "./assets/tech.jpg",
+        description: "Your one-stop destination for all electronics and gadgets. From smartphones to accessories, we have everything you need at competitive prices.",
+        deliveryTime: "30-45 min",
+        minOrder: "₹100",
         products: [
           {
-            name: "Headphones",
+            name: "Wireless Bluetooth Headphones",
             price: 1299,
-            description: "Wireless Bluetooth Headphones",
-            image: "./assets/headphones.jpg"
+            originalPrice: 1599,
+            description: "High-quality wireless headphones with noise cancellation and 20-hour battery life.",
+            image: "./assets/headphones.jpg",
+            inStock: true,
+            discount: 19
           },
           {
-            name: "USB Cable",
+            name: "Fast Charging Type-C Cable",
             price: 199,
-            description: "Fast charging Type-C cable",
-            image: "./assets/usb.jpg"
+            originalPrice: 299,
+            description: "Premium Type-C cable with fast charging capability and durable build quality.",
+            image: "./assets/usb.jpg",
+            inStock: true,
+            discount: 33
           }
         ]
       },
@@ -107,18 +186,27 @@
         location: "Pune",
         rating: 4.6,
         image: "./assets/city-bookstore.jpg",
+        description: "A haven for book lovers with a vast collection of fiction, non-fiction, academic books, and bestsellers. Find your next favorite read here.",
+        deliveryTime: "25-40 min",
+        minOrder: "₹75",
         products: [
           {
             name: "Atomic Habits",
             price: 349,
-            description: "Bestselling book by James Clear",
-            image: "./assets/atomic.jpg"
+            originalPrice: 499,
+            description: "The #1 New York Times bestseller by James Clear. Learn how tiny changes create remarkable results.",
+            image: "./assets/atomic.jpg",
+            inStock: true,
+            discount: 30
           },
           {
             name: "1984",
             price: 299,
-            description: "Classic novel by George Orwell",
-            image: "./assets/1984-cover.jpg"
+            originalPrice: 399,
+            description: "George Orwell's classic dystopian novel. A must-read masterpiece of literature.",
+            image: "./assets/1984-cover.jpg",
+            inStock: true,
+            discount: 25
           }
         ]
       }
@@ -127,6 +215,25 @@
     function getShopIdFromURL() {
       const params = new URLSearchParams(window.location.search);
       return parseInt(params.get("shopId"));
+    }
+
+    function generateStars(rating) {
+      const fullStars = Math.floor(rating);
+      const hasHalfStar = rating % 1 >= 0.5;
+      const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+      
+      let stars = '';
+      for (let i = 0; i < fullStars; i++) {
+        stars += '<i class="fas fa-star text-yellow-400"></i>';
+      }
+      if (hasHalfStar) {
+        stars += '<i class="fas fa-star-half-alt text-yellow-400"></i>';
+      }
+      for (let i = 0; i < emptyStars; i++) {
+        stars += '<i class="far fa-star text-yellow-400"></i>';
+      }
+      
+      return stars;
     }
 
     function addToCart(product, shop) {
@@ -142,6 +249,7 @@
         cart.push({
           productName: product.name,
           price: product.price,
+          originalPrice: product.originalPrice,
           qty: 1,
           shopId: shop.id,
           shopName: shop.name,
@@ -150,7 +258,48 @@
       }
 
       localStorage.setItem("cart", JSON.stringify(cart));
-      alert(`${product.name} added to cart!`);
+      
+      // Show success notification
+      showNotification(`${product.name} added to cart!`, 'success');
+      updateCartBadge();
+    }
+
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg transition-all duration-300 transform translate-x-full`;
+      
+      const bgColor = type === 'success' ? 'bg-success' : 'bg-primary';
+      const icon = type === 'success' ? 'fas fa-check' : 'fas fa-info';
+      
+      notification.innerHTML = `
+        <div class="flex items-center space-x-3 ${bgColor} text-white px-4 py-3 rounded-xl">
+          <i class="${icon}"></i>
+          <span class="font-medium">${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+      }, 100);
+      
+      // Animate out and remove
+      setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+
+    function updateCartBadge() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      const badge = document.getElementById('cart-badge');
+      badge.textContent = totalItems;
+      badge.style.display = totalItems > 0 ? 'flex' : 'none';
     }
 
     function renderShopDetails() {
@@ -159,43 +308,209 @@
       const container = document.getElementById("shop-container");
 
       if (!shop) {
-        container.innerHTML = "<p class='text-red-500'>Shop not found.</p>";
+        container.innerHTML = `
+          <div class="text-center py-12">
+            <div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-exclamation-triangle text-gray-400 text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Shop not found</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">The shop you're looking for doesn't exist or has been removed.</p>
+            <a href="index.html" class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-xl font-semibold hover:from-secondary hover:to-primary transition-all duration-300">
+              Back to Home
+            </a>
+          </div>
+        `;
         return;
       }
 
+      const stars = generateStars(shop.rating);
+
       container.innerHTML = `
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-10">
-          <div class="flex flex-col md:flex-row items-center gap-6">
-            <img src="${shop.image}" alt="${shop.name}" class="w-64 h-44 object-cover rounded-lg shadow" />
-            <div>
-              <h2 class="text-3xl font-bold text-primary dark:text-accent">${shop.name}</h2>
-              <p class="text-gray-600 dark:text-gray-300">${shop.category} • ${shop.location}</p>
-              <p class="text-yellow-500 mt-1">⭐ ${shop.rating}</p>
+        <!-- Shop Header -->
+        <div class="bg-white dark:bg-darkCard rounded-2xl shadow-lg overflow-hidden mb-8">
+          <div class="relative h-64 md:h-80">
+            <img src="${shop.image}" alt="${shop.name}" class="w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <div class="absolute bottom-6 left-6 right-6">
+              <div class="flex flex-col md:flex-row md:items-end md:justify-between">
+                <div class="text-white">
+                  <h1 class="text-3xl md:text-4xl font-display font-bold mb-2">${shop.name}</h1>
+                  <p class="text-white/90 mb-3 flex items-center">
+                    <i class="fas fa-map-marker-alt mr-2"></i>
+                    ${shop.location}
+                  </p>
+                  <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-1">
+                      ${stars}
+                      <span class="ml-2 font-semibold">${shop.rating}</span>
+                    </div>
+                    <span class="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
+                      ${shop.category}
+                    </span>
+                  </div>
+                </div>
+                <div class="mt-4 md:mt-0 flex flex-col space-y-2">
+                  <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3 text-white">
+                    <div class="text-sm opacity-90">Delivery Time</div>
+                    <div class="font-semibold">${shop.deliveryTime}</div>
+                  </div>
+                  <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3 text-white">
+                    <div class="text-sm opacity-90">Min Order</div>
+                    <div class="font-semibold">${shop.minOrder}</div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+          
+          <div class="p-6">
+            <p class="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+              ${shop.description}
+            </p>
           </div>
         </div>
 
-        <h3 class="text-2xl font-semibold mb-4 text-primary dark:text-accent">Products</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          ${shop.products.map(product => `
-            <div class="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden flex flex-col">
-              <img src="${product.image}" alt="${product.name}" class="h-40 w-full object-cover"/>
-              <div class="p-4 flex-1 flex flex-col">
-                <h4 class="text-lg font-semibold mb-1">${product.name}</h4>
-                <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">${product.description}</p>
-                <p class="text-primary dark:text-accent font-bold mb-4">₹${product.price}</p>
-                <button onclick='addToCart(${JSON.stringify(product)}, ${JSON.stringify(shop)})'
-                  class="mt-auto bg-primary hover:bg-blue-700 text-white px-3 py-2 rounded transition text-sm font-medium">
-                  Add to Cart
-                </button>
+        <!-- Products Section -->
+        <div class="mb-8">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl md:text-3xl font-display font-bold text-gray-900 dark:text-white">
+              Products
+            </h2>
+            <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+              <i class="fas fa-shopping-bag"></i>
+              <span>${shop.products.length} items available</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${shop.products.map(product => `
+              <div class="group bg-white dark:bg-darkCard rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden animate-fadeIn">
+                <div class="relative overflow-hidden">
+                  <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"/>
+                  ${product.discount > 0 ? `
+                    <div class="absolute top-3 left-3">
+                      <span class="bg-error text-white px-2 py-1 rounded-full text-xs font-bold">
+                        -${product.discount}%
+                      </span>
+                    </div>
+                  ` : ''}
+                  ${!product.inStock ? `
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+                      <span class="bg-white text-gray-900 px-3 py-1 rounded-full text-sm font-semibold">
+                        Out of Stock
+                      </span>
+                    </div>
+                  ` : ''}
+                </div>
+                
+                <div class="p-6">
+                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-accent transition-colors duration-200">
+                    ${product.name}
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                    ${product.description}
+                  </p>
+                  
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-2">
+                      <span class="text-2xl font-bold text-primary dark:text-accent">₹${product.price}</span>
+                      ${product.originalPrice > product.price ? `
+                        <span class="text-gray-500 dark:text-gray-400 line-through">₹${product.originalPrice}</span>
+                      ` : ''}
+                    </div>
+                    <div class="flex items-center space-x-1">
+                      <i class="fas fa-star text-yellow-400 text-sm"></i>
+                      <span class="text-sm text-gray-600 dark:text-gray-400">4.5</span>
+                    </div>
+                  </div>
+                  
+                  <button 
+                    onclick='addToCart(${JSON.stringify(product)}, ${JSON.stringify(shop)})'
+                    class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2"
+                    ${!product.inStock ? 'disabled' : ''}
+                  >
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>${product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
+                  </button>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="bg-white dark:bg-darkCard rounded-2xl shadow-lg p-6">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Customer Reviews</h3>
+          <div class="space-y-4">
+            <div class="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+              <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold">
+                RS
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center space-x-2 mb-2">
+                  <h4 class="font-semibold text-gray-900 dark:text-white">Rahul Sharma</h4>
+                  <div class="flex text-yellow-400 text-sm">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                  "Great quality products and fast delivery. The shop owner is very friendly and helpful. Highly recommended!"
+                </p>
               </div>
             </div>
-          `).join("")}
+            
+            <div class="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+              <div class="w-10 h-10 bg-gradient-to-br from-secondary to-accent rounded-full flex items-center justify-center text-white font-bold">
+                PK
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center space-x-2 mb-2">
+                  <h4 class="font-semibold text-gray-900 dark:text-white">Priya Kumar</h4>
+                  <div class="flex text-yellow-400 text-sm">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">
+                  "Fresh groceries and reasonable prices. Delivery was on time and the packaging was excellent."
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       `;
     }
 
-    renderShopDetails();
+    // Dark mode toggle
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('localconnect_theme', isDark ? 'dark' : 'light');
+      
+      const themeIcon = document.getElementById('theme-icon');
+      themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-700';
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize theme
+      if (localStorage.getItem('localconnect_theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.getElementById('theme-icon').className = 'fas fa-sun text-gray-300';
+      }
+
+      // Update cart badge
+      updateCartBadge();
+
+      // Render shop details
+      renderShopDetails();
+    });
   </script>
 </body>
 </html>

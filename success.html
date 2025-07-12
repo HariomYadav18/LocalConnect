@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Order Placed - LocalConnect</title>
+  <title>Order Confirmed - LocalConnect</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -11,66 +11,405 @@
       theme: {
         extend: {
           colors: {
-            primary: '#3B82F6',
-            accent: '#60A5FA',
-            darkBg: '#111827'
+            primary: '#FF6B35',
+            secondary: '#F7931E',
+            accent: '#FFD23F',
+            success: '#2ECC71',
+            warning: '#F39C12',
+            error: '#E74C3C',
+            muted: '#F8F9FA',
+            darkBg: '#1A1A1A',
+            darkCard: '#2D2D2D',
+            darkBorder: '#404040'
           },
           fontFamily: {
-            sans: ['Inter', 'sans-serif']
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Poppins', 'system-ui', 'sans-serif']
+          },
+          animation: {
+            fadeIn: 'fadeIn 0.6s ease-out',
+            slideUp: 'slideUp 0.5s ease-out',
+            bounceIn: 'bounceIn 0.8s ease-out',
+            pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            checkmark: 'checkmark 0.5s ease-in-out 0.4s both'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            bounceIn: {
+              '0%': { opacity: '0', transform: 'scale(0.3)' },
+              '50%': { opacity: '1', transform: 'scale(1.05)' },
+              '70%': { transform: 'scale(0.9)' },
+              '100%': { opacity: '1', transform: 'scale(1)' }
+            },
+            checkmark: {
+              '0%': { transform: 'scale(0)' },
+              '50%': { transform: 'scale(1.2)' },
+              '100%': { transform: 'scale(1)' }
+            }
           }
         }
       }
     }
   </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 dark:bg-darkBg text-gray-800 dark:text-gray-100 font-sans transition duration-300">
+<body class="bg-gray-50 dark:bg-darkBg text-gray-900 dark:text-gray-100 font-sans transition-all duration-300">
 
-  <nav class="bg-white dark:bg-gray-800 shadow px-6 py-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary dark:text-accent">LocalConnect</h1>
-    <a href="index.html" class="text-sm font-medium hover:text-primary dark:hover:text-accent transition">Home</a>
+  <!-- Enhanced Navbar -->
+  <nav class="bg-white/95 dark:bg-darkCard/95 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-darkBorder sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <a href="index.html" class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg">
+              <i class="fas fa-store text-white text-lg"></i>
+            </div>
+            <h1 class="text-2xl font-display font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              LocalConnect
+            </h1>
+          </a>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
+            <i class="fas fa-home text-sm"></i>
+            <span>Home</span>
+          </a>
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
+            <i class="fas fa-shopping-bag text-sm"></i>
+            <span>Shop More</span>
+          </a>
+        </div>
+
+        <!-- Right Side Actions -->
+        <div class="flex items-center space-x-4">
+          <!-- Dark Mode Toggle -->
+          <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-100 dark:bg-darkBorder hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <i id="theme-icon" class="fas fa-moon text-gray-700 dark:text-gray-300"></i>
+          </button>
+        </div>
+      </div>
+    </div>
   </nav>
 
-  <main class="max-w-2xl mx-auto px-6 py-16 text-center animate-fadeIn">
-    <svg class="mx-auto mb-6 w-20 h-20 text-green-500 animate-bounceOnce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-    </svg>
-    <h2 class="text-3xl font-bold mb-4 text-primary dark:text-accent">Thank You!</h2>
-    <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">Your order has been placed successfully.</p>
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Success Animation -->
+    <div class="text-center mb-12 animate-bounceIn">
+      <div class="w-32 h-32 bg-gradient-to-br from-success to-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+        <i class="fas fa-check text-white text-5xl animate-checkmark"></i>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-display font-bold text-gray-900 dark:text-white mb-4">
+        Order Confirmed!
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-400 mb-8">
+        Thank you for testing our project demo. Your order has been successfully processed.
+      </p>
+    </div>
 
-    <div id="order-summary" class="bg-white dark:bg-gray-800 p-6 rounded shadow text-left"></div>
+    <!-- Order Details -->
+    <div class="bg-white dark:bg-darkCard rounded-2xl shadow-lg overflow-hidden mb-8 animate-fadeIn">
+      <div class="bg-gradient-to-r from-primary to-secondary p-6">
+        <h2 class="text-2xl font-display font-bold text-white flex items-center">
+          <i class="fas fa-receipt mr-3"></i>
+          Order Details
+        </h2>
+      </div>
+      
+      <div class="p-6">
+        <div id="order-details">
+          <!-- Order details will be populated here -->
+        </div>
+      </div>
+    </div>
 
-    <a href="index.html" class="mt-6 inline-block bg-primary hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition">Return to Home</a>
+    <!-- Delivery Status -->
+    <div class="bg-white dark:bg-darkCard rounded-2xl shadow-lg p-6 mb-8 animate-fadeIn" style="animation-delay: 0.2s">
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+        <i class="fas fa-truck text-primary mr-3"></i>
+        Delivery Status
+      </h3>
+      
+      <div class="relative">
+        <div class="flex items-center space-x-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 bg-success rounded-full flex items-center justify-center">
+              <i class="fas fa-check text-white"></i>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h4 class="font-semibold text-gray-900 dark:text-white">Order Confirmed</h4>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Your order has been received and confirmed</p>
+          </div>
+        </div>
+        
+        <div class="border-l-2 border-gray-200 dark:border-darkBorder ml-6 mt-4 pl-6">
+          <div class="flex items-center space-x-4">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+                <i class="fas fa-cog text-white animate-spin"></i>
+              </div>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-white">Preparing</h4>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Your order is being prepared by the shop</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="border-l-2 border-gray-200 dark:border-darkBorder ml-6 mt-4 pl-6">
+          <div class="flex items-center space-x-4">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                <i class="fas fa-motorcycle text-gray-500"></i>
+              </div>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-semibold text-gray-500 dark:text-gray-400">On the Way</h4>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Your order will be picked up for delivery</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="border-l-2 border-gray-200 dark:border-darkBorder ml-6 mt-4 pl-6">
+          <div class="flex items-center space-x-4">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                <i class="fas fa-home text-gray-500"></i>
+              </div>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-semibold text-gray-500 dark:text-gray-400">Delivered</h4>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Your order will be delivered to your doorstep</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 animate-fadeIn" style="animation-delay: 0.4s">
+      <a href="index.html" class="flex-1 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-4 px-8 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2">
+        <i class="fas fa-shopping-bag"></i>
+        <span>Continue Shopping</span>
+      </a>
+      <button onclick="downloadReceipt()" class="flex-1 border-2 border-primary dark:border-accent text-primary dark:text-accent hover:bg-primary hover:text-white dark:hover:bg-accent dark:hover:text-white py-4 px-8 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2">
+        <i class="fas fa-download"></i>
+        <span>Download Receipt</span>
+      </button>
+    </div>
+
+    <!-- Help Section -->
+    <div class="mt-12 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-6 animate-fadeIn" style="animation-delay: 0.6s">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+        <i class="fas fa-question-circle text-primary mr-2"></i>
+        Need Help?
+      </h3>
+      <p class="text-gray-600 dark:text-gray-300 mb-4">
+        If you have any questions about our project demo, our development team is here to help.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="tel:+91-98765-43210" class="flex items-center justify-center space-x-2 bg-white dark:bg-darkCard px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent transition-colors duration-200">
+          <i class="fas fa-phone"></i>
+          <span>Call Team</span>
+        </a>
+        <a href="mailto:localconnect.project@gmail.com" class="flex items-center justify-center space-x-2 bg-white dark:bg-darkCard px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent transition-colors duration-200">
+          <i class="fas fa-envelope"></i>
+          <span>Email Team</span>
+        </a>
+        <a href="#" class="flex items-center justify-center space-x-2 bg-white dark:bg-darkCard px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent transition-colors duration-200">
+          <i class="fas fa-comments"></i>
+          <span>Project Chat</span>
+        </a>
+      </div>
+    </div>
   </main>
 
+  <!-- Floating Action Button -->
+  <button id="fab" title="Need help?" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full shadow-lg z-50 flex items-center justify-center transition-all duration-300 hover:scale-110">
+    <i class="fas fa-comments text-xl"></i>
+  </button>
+
   <script>
-    const summaryEl = document.getElementById("order-summary");
-    const order = JSON.parse(localStorage.getItem("orderSummary"));
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('localconnect_theme', isDark ? 'dark' : 'light');
+      
+      const themeIcon = document.getElementById('theme-icon');
+      themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-700';
+    }
 
-    if (!order || !order.items || order.items.length === 0) {
-      summaryEl.innerHTML = `<p class="text-gray-500 text-center">No order summary found.</p>`;
-    } else {
-      const itemsHTML = order.items.map(item => `
-        <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-700">
-          <span>${item.name} × ${item.qty}</span>
-          <span>₹${item.qty * item.price}</span>
+    function formatOrderDetails(orderData) {
+      const container = document.getElementById('order-details');
+      
+      container.innerHTML = `
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Order Information</h4>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Order ID:</span>
+                <span class="font-medium text-gray-900 dark:text-white">${orderData.orderId}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Order Date:</span>
+                <span class="font-medium text-gray-900 dark:text-white">${new Date(orderData.orderDate).toLocaleDateString()}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Order Time:</span>
+                <span class="font-medium text-gray-900 dark:text-white">${new Date(orderData.orderDate).toLocaleTimeString()}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Total Items:</span>
+                <span class="font-medium text-gray-900 dark:text-white">${orderData.items.reduce((sum, item) => sum + item.qty, 0)}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Delivery Information</h4>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Name:</span>
+                <span class="font-medium text-gray-900 dark:text-white">${orderData.name}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Phone:</span>
+                <span class="font-medium text-gray-900 dark:text-white">${orderData.phone}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">City:</span>
+                <span class="font-medium text-gray-900 dark:text-white">${orderData.city}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Pincode:</span>
+                <span class="font-medium text-gray-900 dark:text-white">${orderData.pincode}</span>
+              </div>
+            </div>
+          </div>
         </div>
-      `).join("");
-
-      summaryEl.innerHTML = `
-        <h3 class="text-xl font-semibold mb-2">Order Summary</h3>
-        <p><strong>Name:</strong> ${order.name}</p>
-        <p><strong>Address:</strong> ${order.address}</p>
-        <p><strong>Phone:</strong> ${order.phone}</p>
-        <div class="mt-4">${itemsHTML}</div>
-        <div class="flex justify-between mt-4 font-bold text-lg">
-          <span>Total:</span>
-          <span>₹${order.total}</span>
+        
+        <div class="border-t border-gray-200 dark:border-darkBorder pt-6">
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Order Items</h4>
+          <div class="space-y-3">
+            ${orderData.items.map(item => `
+              <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+                    <i class="fas fa-shopping-bag text-white text-sm"></i>
+                  </div>
+                  <div>
+                    <h5 class="font-medium text-gray-900 dark:text-white">${item.name}</h5>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">${item.shopName}</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="font-semibold text-gray-900 dark:text-white">₹${item.price}</div>
+                  <div class="text-sm text-gray-600 dark:text-gray-400">Qty: ${item.qty}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        
+        <div class="border-t border-gray-200 dark:border-darkBorder pt-6 mt-6">
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600 dark:text-gray-400">Subtotal:</span>
+              <span class="font-medium">₹${orderData.subtotal.toFixed(2)}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600 dark:text-gray-400">Delivery Fee:</span>
+              <span class="font-medium">₹${orderData.deliveryFee.toFixed(2)}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600 dark:text-gray-400">Taxes:</span>
+              <span class="font-medium">₹${orderData.taxes.toFixed(2)}</span>
+            </div>
+            <div class="flex justify-between text-lg font-semibold text-primary dark:text-accent border-t border-gray-200 dark:border-darkBorder pt-2">
+              <span>Total:</span>
+              <span>₹${orderData.total.toFixed(2)}</span>
+            </div>
+          </div>
         </div>
       `;
-
-      // Optional cleanup
-      localStorage.removeItem("orderSummary");
     }
+
+    function downloadReceipt() {
+      const orderData = JSON.parse(localStorage.getItem("orderSummary"));
+      if (!orderData) return;
+
+      // Create a simple receipt text
+      const receipt = `
+LocalConnect - Project Demo Receipt
+===================================
+
+Order ID: ${orderData.orderId}
+Date: ${new Date(orderData.orderDate).toLocaleDateString()}
+Time: ${new Date(orderData.orderDate).toLocaleTimeString()}
+
+Customer Details:
+----------------
+Name: ${orderData.name}
+Phone: ${orderData.phone}
+Address: ${orderData.address}
+City: ${orderData.city}
+Pincode: ${orderData.pincode}
+
+Order Items:
+-----------
+${orderData.items.map(item => `${item.name} (${item.shopName}) - Qty: ${item.qty} - ₹${item.price}`).join('\n')}
+
+Order Summary:
+-------------
+Subtotal: ₹${orderData.subtotal.toFixed(2)}
+Delivery Fee: ₹${orderData.deliveryFee.toFixed(2)}
+Taxes: ₹${orderData.taxes.toFixed(2)}
+Total: ₹${orderData.total.toFixed(2)}
+
+Thank you for testing our LocalConnect project demo!
+This is a final year Computer Science project.
+Contact: localconnect.project@gmail.com
+      `;
+
+      // Create and download file
+      const blob = new Blob([receipt], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `receipt-${orderData.orderId}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize theme
+      if (localStorage.getItem('localconnect_theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.getElementById('theme-icon').className = 'fas fa-sun text-gray-300';
+      }
+
+      // Load and display order details
+      const orderData = JSON.parse(localStorage.getItem("orderSummary"));
+      if (orderData) {
+        formatOrderDetails(orderData);
+      } else {
+        // Redirect to home if no order data
+        window.location.href = 'index.html';
+      }
+    });
   </script>
 </body>
 </html>

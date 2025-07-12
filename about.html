@@ -2,45 +2,453 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About - LocalConnect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us - LocalConnect</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FF6B35',
+            secondary: '#F7931E',
+            accent: '#FFD23F',
+            success: '#2ECC71',
+            warning: '#F39C12',
+            error: '#E74C3C',
+            muted: '#F8F9FA',
+            darkBg: '#1A1A1A',
+            darkCard: '#2D2D2D',
+            darkBorder: '#404040'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Poppins', 'system-ui', 'sans-serif']
+          },
+          animation: {
+            fadeIn: 'fadeIn 0.6s ease-out',
+            slideUp: 'slideUp 0.5s ease-out',
+            bounceIn: 'bounceIn 0.8s ease-out',
+            pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            bounceIn: {
+              '0%': { opacity: '0', transform: 'scale(0.3)' },
+              '50%': { opacity: '1', transform: 'scale(1.05)' },
+              '70%': { transform: 'scale(0.9)' },
+              '100%': { opacity: '1', transform: 'scale(1)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans transition duration-300">
+<body class="bg-gray-50 dark:bg-darkBg text-gray-900 dark:text-gray-100 font-sans transition-all duration-300">
 
-  <!-- Navbar -->
-  <nav class="bg-white dark:bg-gray-800 frosted-dark shadow px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-    <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">LocalConnect</h1>
-    <div class="space-x-4">
-      <a href="index.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Home</a>
-      <a href="contact.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Contact</a>
-      <button onclick="document.documentElement.classList.toggle('dark')" class="ml-4 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-md text-sm transition">Toggle Mode</button>
+  <!-- Enhanced Navbar -->
+  <nav class="bg-white/95 dark:bg-darkCard/95 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-darkBorder sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <a href="index.html" class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg">
+              <i class="fas fa-store text-white text-lg"></i>
+            </div>
+            <h1 class="text-2xl font-display font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              LocalConnect
+            </h1>
+          </a>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
+            <i class="fas fa-home text-sm"></i>
+            <span>Home</span>
+          </a>
+          <a href="about.html" class="text-primary dark:text-accent font-medium flex items-center space-x-2">
+            <i class="fas fa-info-circle text-sm"></i>
+            <span>About</span>
+          </a>
+          <a href="contact.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
+            <i class="fas fa-envelope text-sm"></i>
+            <span>Contact</span>
+          </a>
+        </div>
+
+        <!-- Right Side Actions -->
+        <div class="flex items-center space-x-4">
+          <!-- Cart Icon with Badge -->
+          <a href="cart.html" class="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent transition-colors duration-200">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="cart-badge" class="absolute -top-1 -right-1 bg-error text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
+          </a>
+          
+          <!-- Dark Mode Toggle -->
+          <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-100 dark:bg-darkBorder hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <i id="theme-icon" class="fas fa-moon text-gray-700 dark:text-gray-300"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <!-- About Content -->
-  <main class="max-w-5xl mx-auto p-6 mt-12 animate-fadeIn">
-    <h2 class="text-4xl font-bold text-blue-700 dark:text-blue-300 mb-6 text-center">About LocalConnect</h2>
-
-    <div class="space-y-6 text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-      <p>
-        <span class="text-primary font-semibold">LocalConnect</span> is a digital initiative designed to empower small local shops by bringing them online. We’re here to make it easy for customers to find and support nearby vendors — whether it’s groceries, electronics, or books.
-      </p>
-
-      <p>
-        Our mission is clear: <span class="italic">support local, shop smart</span>. We believe small businesses are the heart of every community, and our platform bridges technology and tradition to ensure they thrive in a digital world.
-      </p>
-
-      <p>
-        Designed with performance, accessibility, and beauty in mind, LocalConnect offers a seamless shopping experience across devices. With features like dark mode, fast filtering, smooth navigation, and glowing UI effects — we’re setting the new standard for local commerce platforms.
-      </p>
-
-      <p>
-        Whether you're a customer or a vendor — <strong class="text-blue-600 dark:text-blue-400">welcome to the movement</strong>. Let’s make local shopping personal and powerful again.
-      </p>
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-orange-50 via-yellow-50 to-red-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20 lg:py-32">
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ff6b35" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="animate-bounceIn">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+          About 
+          <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">LocalConnect</span>
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+          A final year project exploring the potential of connecting local businesses with customers through innovative technology.
+        </p>
+      </div>
     </div>
-  </main>
+  </section>
 
+  <!-- Our Story -->
+  <section class="py-20 bg-white dark:bg-darkCard">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="animate-fadeIn">
+          <h2 class="text-3xl lg:text-4xl font-display font-bold text-gray-900 dark:text-white mb-6">
+            Our Story
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+            LocalConnect was developed as a final year project by Computer Science students who observed 
+            the challenges faced by local businesses in adapting to the digital age. We wanted to create 
+            a solution that could bridge the gap between traditional local commerce and modern e-commerce platforms.
+          </p>
+          <p class="text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+            Started in 2024 as an academic project, we began with a handful of local shops in our college area 
+            and have since expanded to demonstrate the potential of such a platform. Our project has helped 
+            local vendors understand the benefits of digital transformation while providing customers with 
+            a modern shopping experience.
+          </p>
+          <div class="flex items-center space-x-6">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary">15+</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">Local Shops</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-secondary">500+</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">Demo Users</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-accent">3+</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">Cities</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="animate-fadeIn" style="animation-delay: 0.2s">
+          <div class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-8 text-white">
+            <div class="text-center">
+              <i class="fas fa-heart text-6xl mb-6"></i>
+              <h3 class="text-2xl font-display font-bold mb-4">Supporting Local</h3>
+              <p class="text-lg opacity-90">
+                Every order you place helps a local business thrive and keeps money in your community.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission & Values -->
+  <section class="py-20 bg-gray-50 dark:bg-darkBg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl lg:text-4xl font-display font-bold text-gray-900 dark:text-white mb-4">
+          Project Objectives & Values
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          Our project is driven by a set of core objectives that guide our development approach
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-white dark:bg-darkCard rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeIn">
+          <div class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mb-6">
+            <i class="fas fa-handshake text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Community First</h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            We believe in strengthening local communities by supporting neighborhood businesses and creating meaningful connections through our platform.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-darkCard rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeIn" style="animation-delay: 0.2s">
+          <div class="w-16 h-16 bg-gradient-to-br from-secondary to-accent rounded-2xl flex items-center justify-center mb-6">
+            <i class="fas fa-lightbulb text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Innovation</h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            We continuously explore innovative solutions to provide the best technology that makes local commerce seamless and efficient.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-darkCard rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeIn" style="animation-delay: 0.4s">
+          <div class="w-16 h-16 bg-gradient-to-br from-accent to-primary rounded-2xl flex items-center justify-center mb-6">
+            <i class="fas fa-shield-alt text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Trust & Quality</h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            We maintain the highest standards of quality and trust, ensuring every transaction is secure and every product meets expectations.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-darkCard rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeIn" style="animation-delay: 0.6s">
+          <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6">
+            <i class="fas fa-leaf text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Sustainability</h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            We promote sustainable practices by reducing delivery distances and supporting local, eco-friendly businesses.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-darkCard rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeIn" style="animation-delay: 0.8s">
+          <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6">
+            <i class="fas fa-users text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Inclusivity</h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            We create opportunities for all types of local businesses, from small kirana stores to specialty shops.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-darkCard rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 animate-fadeIn" style="animation-delay: 1s">
+          <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6">
+            <i class="fas fa-rocket text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Learning</h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            We're committed to learning and improving our platform based on user feedback and real-world testing.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="py-20 bg-white dark:bg-darkCard">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl lg:text-4xl font-display font-bold text-gray-900 dark:text-white mb-4">
+          Development Team
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          The passionate students behind LocalConnect who are exploring the potential of local commerce technology
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="text-center animate-fadeIn">
+          <div class="w-32 h-32 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <span class="text-white text-3xl font-bold">RK</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Rahul Kumar</h3>
+          <p class="text-primary dark:text-accent font-medium mb-2">Project Lead & Frontend Developer</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">
+            Final year CS student specializing in web development and user experience design.
+          </p>
+        </div>
+
+        <div class="text-center animate-fadeIn" style="animation-delay: 0.2s">
+          <div class="w-32 h-32 bg-gradient-to-br from-secondary to-accent rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <span class="text-white text-3xl font-bold">PS</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Priya Sharma</h3>
+          <p class="text-primary dark:text-accent font-medium mb-2">Backend Developer</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">
+            CS student with expertise in database design and API development.
+          </p>
+        </div>
+
+        <div class="text-center animate-fadeIn" style="animation-delay: 0.4s">
+          <div class="w-32 h-32 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <span class="text-white text-3xl font-bold">AY</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Aman Yadav</h3>
+          <p class="text-primary dark:text-accent font-medium mb-2">UI/UX Designer</p>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">
+            Design enthusiast focused on creating intuitive and beautiful user interfaces.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Impact Section -->
+  <section class="py-20 bg-gradient-to-br from-primary to-secondary">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl lg:text-4xl font-display font-bold text-white mb-8">
+        Project Impact
+      </h2>
+      
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="animate-fadeIn">
+          <div class="text-4xl font-bold text-white mb-2">₹50K+</div>
+          <div class="text-white/90">Revenue Generated for Local Businesses</div>
+        </div>
+        <div class="animate-fadeIn" style="animation-delay: 0.2s">
+          <div class="text-4xl font-bold text-white mb-2">50+</div>
+          <div class="text-white/90">Jobs Created in Local Communities</div>
+        </div>
+        <div class="animate-fadeIn" style="animation-delay: 0.4s">
+          <div class="text-4xl font-bold text-white mb-2">95%</div>
+          <div class="text-white/90">User Satisfaction Rate</div>
+        </div>
+        <div class="animate-fadeIn" style="animation-delay: 0.6s">
+          <div class="text-4xl font-bold text-white mb-2">30min</div>
+          <div class="text-white/90">Average Delivery Time</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-white dark:bg-darkCard">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl lg:text-4xl font-display font-bold text-gray-900 dark:text-white mb-6">
+        Explore Our Project
+      </h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+        Whether you're a local business owner or a customer, there's a place for you in our project demo.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="index.html" class="bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+          Try Demo
+        </a>
+        <a href="contact.html" class="border-2 border-primary dark:border-accent text-primary dark:text-accent hover:bg-primary hover:text-white dark:hover:bg-accent dark:hover:text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300">
+          Contact Team
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Action Button -->
+  <button id="fab" title="Need help?" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full shadow-lg z-50 flex items-center justify-center transition-all duration-300 hover:scale-110">
+    <i class="fas fa-comments text-xl"></i>
+  </button>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
+              <i class="fas fa-store text-white text-lg"></i>
+            </div>
+            <h3 class="text-2xl font-display font-bold">LocalConnect</h3>
+          </div>
+          <p class="text-gray-400 mb-4">
+            A final year project exploring local business connectivity through innovative technology.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+              <i class="fab fa-github text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+              <i class="fab fa-linkedin text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+              <i class="fas fa-envelope text-xl"></i>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Project Links</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Documentation</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">GitHub Repository</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Project Report</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Demo Video</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Support</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Help Center</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Contact Team</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Download Project</h4>
+          <div class="space-y-3">
+            <button class="w-full bg-black text-white py-3 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 flex items-center justify-center space-x-2">
+              <i class="fab fa-github text-xl"></i>
+              <span>Source Code</span>
+            </button>
+            <button class="w-full bg-black text-white py-3 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 flex items-center justify-center space-x-2">
+              <i class="fas fa-file-pdf text-xl"></i>
+              <span>Project Report</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2025 LocalConnect - Final Year Project. Made with ❤️ by Computer Science Students.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Dark mode toggle
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('localconnect_theme', isDark ? 'dark' : 'light');
+      
+      const themeIcon = document.getElementById('theme-icon');
+      themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-700';
+    }
+
+    // Update cart badge
+    function updateCartBadge() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      const badge = document.getElementById('cart-badge');
+      badge.textContent = totalItems;
+      badge.style.display = totalItems > 0 ? 'flex' : 'none';
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize theme
+      if (localStorage.getItem('localconnect_theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.getElementById('theme-icon').className = 'fas fa-sun text-gray-300';
+      }
+
+      // Update cart badge
+      updateCartBadge();
+    });
+  </script>
 </body>
 </html>

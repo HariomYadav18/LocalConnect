@@ -2,50 +2,511 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact - LocalConnect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us - LocalConnect</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FF6B35',
+            secondary: '#F7931E',
+            accent: '#FFD23F',
+            success: '#2ECC71',
+            warning: '#F39C12',
+            error: '#E74C3C',
+            muted: '#F8F9FA',
+            darkBg: '#1A1A1A',
+            darkCard: '#2D2D2D',
+            darkBorder: '#404040'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Poppins', 'system-ui', 'sans-serif']
+          },
+          animation: {
+            fadeIn: 'fadeIn 0.6s ease-out',
+            slideUp: 'slideUp 0.5s ease-out',
+            bounceIn: 'bounceIn 0.8s ease-out',
+            pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            bounceIn: {
+              '0%': { opacity: '0', transform: 'scale(0.3)' },
+              '50%': { opacity: '1', transform: 'scale(1.05)' },
+              '70%': { transform: 'scale(0.9)' },
+              '100%': { opacity: '1', transform: 'scale(1)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans transition duration-300">
+<body class="bg-gray-50 dark:bg-darkBg text-gray-900 dark:text-gray-100 font-sans transition-all duration-300">
 
-  <!-- Navbar -->
-  <nav class="bg-white dark:bg-gray-800 frosted-dark shadow px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-    <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">LocalConnect</h1>
-    <div class="space-x-4">
-      <a href="index.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Home</a>
-      <a href="about.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition">About</a>
-      <button onclick="document.documentElement.classList.toggle('dark')" class="ml-4 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-md text-sm transition">Toggle Mode</button>
+  <!-- Enhanced Navbar -->
+  <nav class="bg-white/95 dark:bg-darkCard/95 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-darkBorder sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <a href="index.html" class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg">
+              <i class="fas fa-store text-white text-lg"></i>
+            </div>
+            <h1 class="text-2xl font-display font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              LocalConnect
+            </h1>
+          </a>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
+            <i class="fas fa-home text-sm"></i>
+            <span>Home</span>
+          </a>
+          <a href="about.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
+            <i class="fas fa-info-circle text-sm"></i>
+            <span>About</span>
+          </a>
+          <a href="contact.html" class="text-primary dark:text-accent font-medium flex items-center space-x-2">
+            <i class="fas fa-envelope text-sm"></i>
+            <span>Contact</span>
+          </a>
+        </div>
+
+        <!-- Right Side Actions -->
+        <div class="flex items-center space-x-4">
+          <!-- Cart Icon with Badge -->
+          <a href="cart.html" class="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent transition-colors duration-200">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span id="cart-badge" class="absolute -top-1 -right-1 bg-error text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
+          </a>
+          
+          <!-- Dark Mode Toggle -->
+          <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-100 dark:bg-darkBorder hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <i id="theme-icon" class="fas fa-moon text-gray-700 dark:text-gray-300"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <!-- Contact Section -->
-  <main class="max-w-4xl mx-auto p-6 mt-12 animate-fadeIn">
-    <h2 class="text-4xl font-bold text-blue-700 dark:text-blue-300 mb-8 text-center">Get in Touch</h2>
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-orange-50 via-yellow-50 to-red-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20 lg:py-32">
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ff6b35" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
     
-    <form class="space-y-6 bg-white dark:bg-gray-800 shadow-soft rounded-xl p-6 transition duration-300" onsubmit="event.preventDefault(); alert('Message sent!')">
-      <div>
-        <label for="name" class="block text-sm font-medium mb-1">Your Name</label>
-        <input id="name" type="text" required placeholder="Enter your name"
-          class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition" />
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="animate-bounceIn">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+          Get in 
+          <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Touch</span>
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+          We'd love to hear from you. Whether you have a question about our project, feedback, or want to 
+          collaborate, we're here to help.
+        </p>
       </div>
+    </div>
+  </section>
+
+  <!-- Contact Form & Info -->
+  <section class="py-20 bg-white dark:bg-darkCard">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12">
+        <!-- Contact Form -->
+        <div class="animate-fadeIn">
+          <h2 class="text-3xl font-display font-bold text-gray-900 dark:text-white mb-6">
+            Send us a Message
+          </h2>
+          <form id="contact-form" class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  First Name *
+                </label>
+                <input 
+                  type="text" 
+                  name="firstName" 
+                  required
+                  class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Last Name *
+                </label>
+                <input 
+                  type="text" 
+                  name="lastName" 
+                  required
+                  class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Email Address *
+              </label>
+              <input 
+                type="email" 
+                name="email" 
+                required
+                class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Phone Number
+              </label>
+              <input 
+                type="tel" 
+                name="phone"
+                class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Subject *
+              </label>
+              <select 
+                name="subject" 
+                required
+                class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300"
+              >
+                <option value="">Select a subject</option>
+                <option value="general">General Inquiry</option>
+                <option value="project">Project Feedback</option>
+                <option value="collaboration">Collaboration</option>
+                <option value="technical">Technical Question</option>
+                <option value="demo">Demo Request</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Message *
+              </label>
+              <textarea 
+                name="message" 
+                rows="6" 
+                required
+                placeholder="Tell us how we can help you with our project..."
+                class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300 resize-none"
+              ></textarea>
+            </div>
+
+            <button 
+              type="submit" 
+              class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-4 px-8 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2"
+            >
+              <i class="fas fa-paper-plane"></i>
+              <span>Send Message</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="animate-fadeIn" style="animation-delay: 0.2s">
+          <h2 class="text-3xl font-display font-bold text-gray-900 dark:text-white mb-6">
+            Contact Information
+          </h2>
+          
+          <div class="space-y-8">
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-map-marker-alt text-white text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Project Location</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                  Computer Science Department<br>
+                  University Campus<br>
+                  Delhi, India 110001<br>
+                  Academic Project
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-secondary to-accent rounded-xl flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-phone text-white text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Phone Numbers</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                  <a href="tel:+91-98765-43210" class="hover:text-primary dark:hover:text-accent transition-colors duration-200">
+                    +91 98765-43210
+                  </a><br>
+                  <a href="tel:+91-98765-43211" class="hover:text-primary dark:hover:text-accent transition-colors duration-200">
+                    +91 98765-43211
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-accent to-primary rounded-xl flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-envelope text-white text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Email Addresses</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                  <a href="mailto:localconnect.project@gmail.com" class="hover:text-primary dark:hover:text-accent transition-colors duration-200">
+                    localconnect.project@gmail.com
+                  </a><br>
+                  <a href="mailto:project.team@university.edu" class="hover:text-primary dark:hover:text-accent transition-colors duration-200">
+                    project.team@university.edu
+                  </a><br>
+                  <a href="mailto:feedback@localconnect.dev" class="hover:text-primary dark:hover:text-accent transition-colors duration-200">
+                    feedback@localconnect.dev
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-clock text-white text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Response Hours</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                  Monday - Friday: 9:00 AM - 6:00 PM<br>
+                  Saturday: 10:00 AM - 4:00 PM<br>
+                  Sunday: Closed<br>
+                  <span class="text-sm text-gray-500">Project Demo: Available 24/7</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Media -->
+          <div class="mt-12">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Follow Our Project</h3>
+            <div class="flex space-x-4">
+              <a href="#" class="w-12 h-12 bg-gradient-to-br from-gray-600 to-gray-700 rounded-xl flex items-center justify-center text-white hover:scale-110 transition-transform duration-300">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+              <a href="#" class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center text-white hover:scale-110 transition-transform duration-300">
+                <i class="fab fa-linkedin text-xl"></i>
+              </a>
+              <a href="#" class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center text-white hover:scale-110 transition-transform duration-300">
+                <i class="fab fa-youtube text-xl"></i>
+              </a>
+              <a href="#" class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl flex items-center justify-center text-white hover:scale-110 transition-transform duration-300">
+                <i class="fab fa-twitter text-xl"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-20 bg-gray-50 dark:bg-darkBg">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl lg:text-4xl font-display font-bold text-gray-900 dark:text-white mb-4">
+          Frequently Asked Questions
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300">
+          Find answers to common questions about our LocalConnect project
+        </p>
+      </div>
+
+      <div class="space-y-6">
+        <div class="bg-white dark:bg-darkCard rounded-2xl p-6 shadow-lg animate-fadeIn">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+            What is LocalConnect?
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            LocalConnect is a final year Computer Science project that demonstrates how local businesses 
+            can be connected with customers through a modern web platform. It's a proof-of-concept for 
+            local commerce digitalization.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-darkCard rounded-2xl p-6 shadow-lg animate-fadeIn" style="animation-delay: 0.1s">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+            Is this a real business?
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            No, this is an academic project developed by final year students. However, it demonstrates 
+            real-world functionality and could potentially be developed into a commercial platform.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-darkCard rounded-2xl p-6 shadow-lg animate-fadeIn" style="animation-delay: 0.2s">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+            Can I contribute to this project?
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            While this is primarily an academic project, we welcome feedback and suggestions. You can 
+            contact us through the form above or reach out to the development team directly.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-darkCard rounded-2xl p-6 shadow-lg animate-fadeIn" style="animation-delay: 0.3s">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+            What technologies were used?
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            The project uses HTML5, CSS3, JavaScript, and Tailwind CSS for the frontend. It demonstrates 
+            modern web development practices and responsive design principles.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Action Button -->
+  <button id="fab" title="Need help?" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full shadow-lg z-50 flex items-center justify-center transition-all duration-300 hover:scale-110">
+    <i class="fas fa-comments text-xl"></i>
+  </button>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
+              <i class="fas fa-store text-white text-lg"></i>
+            </div>
+            <h3 class="text-2xl font-display font-bold">LocalConnect</h3>
+          </div>
+          <p class="text-gray-400 mb-4">
+            A final year project exploring local business connectivity through innovative technology.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+              <i class="fab fa-github text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+              <i class="fab fa-linkedin text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+              <i class="fas fa-envelope text-xl"></i>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Project Links</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Documentation</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">GitHub Repository</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Project Report</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Demo Video</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Support</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Help Center</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Contact Team</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-4">Contact Info</h4>
+          <div class="space-y-2 text-gray-400">
+            <p class="flex items-center">
+              <i class="fas fa-envelope mr-2"></i>
+              localconnect.project@gmail.com
+            </p>
+            <p class="flex items-center">
+              <i class="fas fa-phone mr-2"></i>
+              +91 98765-43210
+            </p>
+            <p class="flex items-center">
+              <i class="fas fa-map-marker-alt mr-2"></i>
+              University Campus, Delhi
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2025 LocalConnect - Final Year Project. Made with ❤️ by Computer Science Students.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Dark mode toggle
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('localconnect_theme', isDark ? 'dark' : 'light');
       
-      <div>
-        <label for="email" class="block text-sm font-medium mb-1">Email</label>
-        <input id="email" type="email" required placeholder="you@example.com"
-          class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition" />
-      </div>
+      const themeIcon = document.getElementById('theme-icon');
+      themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-700';
+    }
 
-      <div>
-        <label for="message" class="block text-sm font-medium mb-1">Message</label>
-        <textarea id="message" rows="4" required placeholder="Write your message here..."
-          class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition"></textarea>
-      </div>
+    // Update cart badge
+    function updateCartBadge() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      const badge = document.getElementById('cart-badge');
+      badge.textContent = totalItems;
+      badge.style.display = totalItems > 0 ? 'flex' : 'none';
+    }
 
-      <button type="submit"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md shadow-md hover:shadow-lg transition">Send Message</button>
-    </form>
-  </main>
+    // Contact form submission
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target);
+      const data = {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        subject: formData.get('subject'),
+        message: formData.get('message')
+      };
 
+      // Show success message
+      alert('Thank you for your message! We\'ll get back to you soon.');
+      
+      // Reset form
+      e.target.reset();
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize theme
+      if (localStorage.getItem('localconnect_theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.getElementById('theme-icon').className = 'fas fa-sun text-gray-300';
+      }
+
+      // Update cart badge
+      updateCartBadge();
+    });
+  </script>
 </body>
 </html>
