@@ -117,6 +117,29 @@ function addToCart(product, shop) {
   createConfettiBurst();
 }
 
+// Fix: Ensure dark mode toggle and theme always work
+function toggleDarkMode() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('localconnect_theme', isDark ? 'dark' : 'light');
+  const themeIcon = document.getElementById('theme-icon');
+  if (themeIcon) {
+    themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-700';
+  }
+}
+
+function initializeTheme() {
+  if (localStorage.getItem('localconnect_theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+    const themeIcon = document.getElementById('theme-icon');
+    if (themeIcon) themeIcon.className = 'fas fa-sun text-gray-300';
+  } else {
+    document.documentElement.classList.remove('dark');
+    const themeIcon = document.getElementById('theme-icon');
+    if (themeIcon) themeIcon.className = 'fas fa-moon text-gray-700';
+  }
+}
+
+// Fix: Always re-render product features and re-attach event listeners after navigation or theme change
 function renderShopDetails() {
   const shopId = getShopIdFromURL();
   const shop = shops.find(s => s.id === shopId);
@@ -227,27 +250,6 @@ function renderShopDetails() {
   `;
 }
 
-// --- Advanced Features and Dark Mode Logic ---
-
-// Dark mode toggle
-function toggleDarkMode() {
-  const isDark = document.documentElement.classList.toggle('dark');
-  localStorage.setItem('localconnect_theme', isDark ? 'dark' : 'light');
-  const themeIcon = document.getElementById('theme-icon');
-  if (themeIcon) {
-    themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-700';
-  }
-}
-
-// Initialize theme on page load
-function initializeTheme() {
-  if (localStorage.getItem('localconnect_theme') === 'dark') {
-    document.documentElement.classList.add('dark');
-    const themeIcon = document.getElementById('theme-icon');
-    if (themeIcon) themeIcon.className = 'fas fa-sun text-gray-300';
-  }
-}
-
 // Enhance cart badge with animation
 function updateCartBadge(animated) {
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -281,4 +283,5 @@ function initializeShopDetailsPage() {
   renderShopDetails();
 }
 
-document.addEventListener('DOMContentLoaded', initializeShopDetailsPage);
+// Ensure theme is initialized on every navigation
+window.addEventListener('DOMContentLoaded', initializeTheme);
