@@ -2,8 +2,14 @@
 
 function getShopIdFromURL() {
   const params = new URLSearchParams(window.location.search);
-  // Accept both ?shopId= and ?id= for maximum compatibility
-  return parseInt(params.get("shopId") || params.get("id"));
+  // Try all possible keys
+  let id = params.get("shopId") || params.get("id") || params.get("shop");
+  if (!id) {
+    // Try to extract from path (e.g., /shop-details/1)
+    const match = window.location.pathname.match(/shop-details\/(\d+)/);
+    if (match) id = match[1];
+  }
+  return parseInt(id);
 }
 
 function showNotification(message, type = 'info') {
