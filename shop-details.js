@@ -232,13 +232,40 @@ function renderProductCard(product, idx, shop, options = {}) {
 }
 
 function renderShopDetails() {
+  // Debug output
+  console.log('DEBUG: shopId:', getShopIdFromURL && getShopIdFromURL());
+  console.log('DEBUG: typeof shops:', typeof shops, Array.isArray(shops), shops && shops.length, shops);
+
   // Wait for DOM and shops
-  if (typeof shops === 'undefined' || !Array.isArray(shops)) {
+  if (typeof shops === 'undefined') {
+    // Fallback after 1s if shops is still undefined
+    setTimeout(() => {
+      if (typeof shops === 'undefined') {
+        const container = document.getElementById('shop-container');
+        if (container) {
+          container.innerHTML = '<div class="text-center py-12 text-error">Critical error: Shop data could not be loaded. Please check your internet connection or contact support.</div>';
+        }
+      }
+    }, 1000);
     setTimeout(renderShopDetails, 50);
+    return;
+  }
+  if (!Array.isArray(shops)) {
+    const container = document.getElementById('shop-container');
+    if (container) {
+      container.innerHTML = '<div class="text-center py-12 text-error">Critical error: Shop data is not in the correct format.</div>';
+    }
     return;
   }
   if (!document.getElementById('shop-container')) {
     setTimeout(renderShopDetails, 50);
+    return;
+  }
+  if (shops.length === 0) {
+    const container = document.getElementById('shop-container');
+    if (container) {
+      container.innerHTML = '<div class="text-center py-12">No shops available. Please check back later.</div>';
+    }
     return;
   }
   const shopId = getShopIdFromURL();
