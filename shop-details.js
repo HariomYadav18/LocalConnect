@@ -226,7 +226,27 @@ function renderProductCard(product, idx, shop, options = {}) {
 }
 
 function renderShopDetails() {
+  // Defensive: Wait for shops to be defined
+  if (typeof shops === 'undefined' || !Array.isArray(shops)) {
+    setTimeout(renderShopDetails, 50); // Try again shortly
+    return;
+  }
   const shopId = getShopIdFromURL();
+  if (!shopId || isNaN(shopId)) {
+    document.getElementById("shop-container").innerHTML = `
+      <div class="text-center py-12">
+        <div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-exclamation-triangle text-gray-400 text-3xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Invalid shop link</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">No shop selected. Please choose a shop from the homepage.</p>
+        <a href="index.html" class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-xl font-semibold hover:from-secondary hover:to-primary transition-all duration-300">
+          Back to Home
+        </a>
+      </div>
+    `;
+    return;
+  }
   const shop = shops.find(s => s.id === shopId);
   const container = document.getElementById("shop-container");
 
