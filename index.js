@@ -185,6 +185,13 @@ function displayShops(shops) {
   });
 }
 
+function getFavoriteShops() {
+  return JSON.parse(localStorage.getItem('favoriteShops') || '[]');
+}
+function setFavoriteShops(favs) {
+  localStorage.setItem('favoriteShops', JSON.stringify(favs));
+}
+
 // Create enhanced shop card with 3D effects
 function createShopCard(shop, index) {
   const card = document.createElement('div');
@@ -195,7 +202,11 @@ function createShopCard(shop, index) {
   const hasFreeDelivery = Math.random() > 0.5;
   const hasOffers = Math.random() > 0.6;
   const isOpen = Math.random() > 0.3;
-  
+
+  // Favorite state
+  const favoriteShops = getFavoriteShops();
+  const isFavorite = favoriteShops.includes(shop.id);
+
   card.innerHTML = `
     <div class="relative overflow-hidden rounded-t-2xl">
       <img src="${shop.image}" alt="${shop.name}" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
@@ -208,8 +219,8 @@ function createShopCard(shop, index) {
           ${isOpen ? 'OPEN' : 'CLOSED'}
         </span>
       </div>
-      <div class="absolute bottom-4 right-4 bg-white dark:bg-darkCard rounded-full p-2 shadow-lg">
-        <i class="fas fa-heart text-gray-400 hover:text-red-500 transition-colors duration-300"></i>
+      <div class="absolute bottom-4 right-4 bg-white dark:bg-darkCard rounded-full p-2 shadow-lg favorite-heart" style="cursor:pointer;">
+        <i class="fas fa-heart ${isFavorite ? 'text-red-500 scale-110' : 'text-gray-400'} hover:text-red-500 transition-all duration-300"></i>
       </div>
     </div>
     
@@ -241,9 +252,33 @@ function createShopCard(shop, index) {
     </div>
   `;
   
-  // Add click handler
-  card.addEventListener('click', () => {
+  // Add click handler for the card (excluding heart)
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('.favorite-heart')) return; // Don't navigate if heart clicked
     window.location.href = `shop-details.html?shopId=${shop.id}`;
+  });
+
+  // Heart icon logic
+  const heartDiv = card.querySelector('.favorite-heart');
+  const heartIcon = heartDiv.querySelector('i');
+  heartDiv.addEventListener('click', (e) => {
+    e.stopPropagation();
+    let favs = getFavoriteShops();
+    if (favs.includes(shop.id)) {
+      favs = favs.filter(id => id !== shop.id);
+      heartIcon.classList.remove('text-red-500', 'scale-110');
+      heartIcon.classList.add('text-gray-400');
+    } else {
+      favs.push(shop.id);
+      heartIcon.classList.add('text-red-500', 'scale-110');
+      heartIcon.classList.remove('text-gray-400');
+      heartIcon.animate([
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.3)' },
+        { transform: 'scale(1)' }
+      ], { duration: 400, easing: 'cubic-bezier(0.68,-0.55,0.27,1.55)' });
+    }
+    setFavoriteShops(favs);
   });
   
   return card;
