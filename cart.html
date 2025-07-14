@@ -282,207 +282,12 @@
     <i class="fas fa-comments text-xl"></i>
   </button>
 
+  <!-- Ensure all scripts use defer and correct order -->
+  <script src="shops.js" defer></script>
+  <script src="shop-details.js" defer></script>
+  <script src="cart.js" defer></script>
+
   <script>
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    function saveCart() {
-      localStorage.setItem("cart", JSON.stringify(cart));
-      updateCartBadge();
-    }
-
-    function updateCartBadge() {
-      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-      const badge = document.getElementById('cart-badge');
-      badge.textContent = totalItems;
-      badge.style.display = totalItems > 0 ? 'flex' : 'none';
-    }
-
-    function renderCartItems() {
-      const container = document.getElementById("cart-items-container");
-      const checkoutBtn = document.getElementById("checkout-btn");
-
-      if (cart.length === 0) {
-        container.innerHTML = `
-          <div class="bg-white dark:bg-darkCard rounded-2xl shadow-lg p-12 text-center">
-            <div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
-              <i class="fas fa-shopping-cart text-gray-400 text-3xl"></i>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Your cart is empty</h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-6">Looks like you haven't added any items to your cart yet.</p>
-            <a href="index.html" class="bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-xl font-semibold hover:from-secondary hover:to-primary transition-all duration-300 inline-flex items-center space-x-2">
-              <i class="fas fa-shopping-bag"></i>
-              <span>Start Shopping</span>
-            </a>
-          </div>
-        `;
-        checkoutBtn.disabled = true;
-        return;
-      }
-
-      // Group items by shop
-      const shopGroups = {};
-      cart.forEach(item => {
-        if (!shopGroups[item.shopId]) {
-          shopGroups[item.shopId] = {
-            shopName: item.shopName,
-            items: []
-          };
-        }
-        shopGroups[item.shopId].items.push(item);
-      });
-
-      container.innerHTML = Object.entries(shopGroups).map(([shopId, shopData]) => `
-        <div class="bg-white dark:bg-darkCard rounded-2xl shadow-lg overflow-hidden mb-6 animate-fadeIn">
-          <div class="bg-gradient-to-r from-primary to-secondary p-4">
-            <h3 class="text-white font-semibold flex items-center">
-              <i class="fas fa-store mr-2"></i>
-              ${shopData.shopName}
-            </h3>
-          </div>
-          
-          <div class="p-6">
-            ${shopData.items.map((item, index) => `
-              <div class="flex items-center space-x-4 py-4 ${index > 0 ? 'border-t border-gray-100 dark:border-darkBorder' : ''}">
-                <img src="${item.image}" alt="${item.productName}" class="w-16 h-16 object-cover rounded-lg">
-                
-                <div class="flex-1">
-                  <h4 class="font-semibold text-gray-900 dark:text-white">${item.productName}</h4>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">${shopData.shopName}</p>
-                  <div class="flex items-center space-x-2 mt-1">
-                    <span class="text-lg font-bold text-primary dark:text-accent">₹${item.price}</span>
-                    ${item.originalPrice ? `<span class="text-sm text-gray-500 line-through">₹${item.originalPrice}</span>` : ''}
-                  </div>
-                </div>
-                
-                <div class="flex items-center space-x-3">
-                  <div class="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-1">
-                    <button class="decrease text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-accent transition-colors duration-200" data-index="${cart.findIndex(cartItem => cartItem.productName === item.productName && cartItem.shopId === item.shopId)}">
-                      <i class="fas fa-minus text-sm"></i>
-                    </button>
-                    <span class="font-semibold text-gray-900 dark:text-white min-w-[2rem] text-center">${item.qty}</span>
-                    <button class="increase text-gray-600 hover:text-primary dark:text-gray-400 dark:hover:text-accent transition-colors duration-200" data-index="${cart.findIndex(cartItem => cartItem.productName === item.productName && cartItem.shopId === item.shopId)}">
-                      <i class="fas fa-plus text-sm"></i>
-                    </button>
-                  </div>
-                  
-                  <div class="text-right">
-                    <div class="font-semibold text-gray-900 dark:text-white">₹${(item.price * item.qty).toFixed(2)}</div>
-                    <button class="remove text-red-500 hover:text-red-700 text-sm font-medium transition-colors duration-200" data-index="${cart.findIndex(cartItem => cartItem.productName === item.productName && cartItem.shopId === item.shopId)}">
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `).join('');
-
-      checkoutBtn.disabled = false;
-      updateOrderSummary();
-      attachEventListeners();
-    }
-
-    function updateOrderSummary() {
-      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      const deliveryFee = subtotal > 0 ? 20 : 0;
-      const taxes = subtotal * 0.05; // 5% tax
-      const total = subtotal + deliveryFee + taxes;
-
-      document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
-      document.getElementById('delivery-fee').textContent = `₹${deliveryFee.toFixed(2)}`;
-      document.getElementById('taxes').textContent = `₹${taxes.toFixed(2)}`;
-      document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
-    }
-
-    function attachEventListeners() {
-      document.querySelectorAll(".increase").forEach(btn =>
-        btn.addEventListener("click", e => {
-          const index = +e.target.closest('button').dataset.index;
-          cart[index].qty++;
-          saveCart();
-          renderCartItems();
-        })
-      );
-
-      document.querySelectorAll(".decrease").forEach(btn =>
-        btn.addEventListener("click", e => {
-          const index = +e.target.closest('button').dataset.index;
-          if (cart[index].qty > 1) {
-            cart[index].qty--;
-          } else {
-            cart.splice(index, 1);
-          }
-          saveCart();
-          renderCartItems();
-        })
-      );
-
-      document.querySelectorAll(".remove").forEach(btn =>
-        btn.addEventListener("click", e => {
-          const index = +e.target.closest('button').dataset.index;
-          cart.splice(index, 1);
-          saveCart();
-          renderCartItems();
-        })
-      );
-    }
-
-    // Modal functionality
-    document.getElementById('checkout-btn').addEventListener('click', () => {
-      document.getElementById('checkout-modal').classList.remove('hidden');
-    });
-
-    document.getElementById('close-modal').addEventListener('click', () => {
-      document.getElementById('checkout-modal').classList.add('hidden');
-    });
-
-    document.getElementById('cancel-checkout').addEventListener('click', () => {
-      document.getElementById('checkout-modal').classList.add('hidden');
-    });
-
-    // Form submission
-    document.getElementById('checkout-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      
-      const spinner = document.getElementById('loading-spinner');
-      const submitBtn = document.getElementById('place-order-btn');
-      
-      spinner.classList.remove('hidden');
-      submitBtn.disabled = true;
-
-      const formData = new FormData(e.target);
-      const orderData = {
-        name: formData.get("name"),
-        phone: formData.get("phone"),
-        address: formData.get("address"),
-        city: formData.get("city"),
-        pincode: formData.get("pincode"),
-        instructions: formData.get("instructions"),
-        items: cart.map(item => ({
-          name: item.productName,
-          qty: item.qty,
-          price: item.price,
-          shopName: item.shopName
-        })),
-        subtotal: cart.reduce((sum, item) => sum + item.price * item.qty, 0),
-        deliveryFee: 20,
-        taxes: cart.reduce((sum, item) => sum + item.price * item.qty, 0) * 0.05,
-        total: cart.reduce((sum, item) => sum + item.price * item.qty, 0) + 20 + (cart.reduce((sum, item) => sum + item.price * item.qty, 0) * 0.05),
-        orderDate: new Date().toISOString(),
-        orderId: 'LC' + Date.now()
-      };
-
-      localStorage.setItem("orderSummary", JSON.stringify(orderData));
-      localStorage.removeItem("cart");
-
-      setTimeout(() => {
-        spinner.classList.add('hidden');
-        submitBtn.disabled = false;
-        window.location.href = "success.html";
-      }, 1500);
-    });
-
     // Dark mode toggle
     function toggleDarkMode() {
       const isDark = document.documentElement.classList.toggle('dark');
@@ -501,10 +306,10 @@
       }
 
       // Update cart badge
-      updateCartBadge();
+      // This function is now handled by cart.js
 
       // Render cart items
-      renderCartItems();
+      // This function is now handled by cart.js
     });
   </script>
 </body>

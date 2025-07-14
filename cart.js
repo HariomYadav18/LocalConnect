@@ -6,6 +6,9 @@ function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+// Import the unified product card renderer from shop-details.js if not already present
+// (Assume shop-details.js is loaded before cart.js, or move the function to a shared file if needed)
+
 function renderCartItems() {
   const cartBody = document.getElementById("cart-body");
   const totalPriceElem = document.getElementById("total-price");
@@ -30,8 +33,8 @@ function renderCartItems() {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm font-medium text-gray-900 dark:text-gray-100">${product.name}</div>
-          <div class="text-sm text-gray-500 dark:text-gray-400">${shop.name}</div>
+          ${renderProductCard(product, item.productIndex, shop, { showAddToCart: false })}
+          <div class="text-sm text-gray-500 dark:text-gray-400 mt-2">${shop.name}</div>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm">
           <div class="flex items-center gap-2">
@@ -45,6 +48,11 @@ function renderCartItems() {
           <button class="remove text-red-600 hover:text-red-800 font-semibold" data-index="${index}">Remove</button>
         </td>
       `;
+      cartBody.appendChild(row);
+    } else {
+      // Handle missing product/shop gracefully
+      const row = document.createElement("tr");
+      row.innerHTML = `<td colspan="4" class="text-center text-error">Product or shop not found (may have been removed).</td>`;
       cartBody.appendChild(row);
     }
   });

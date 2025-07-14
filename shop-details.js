@@ -165,6 +165,66 @@ function getRandomStock() {
   return Math.floor(Math.random() * 10) + 1;
 }
 
+// --- Unified Product Card Renderer ---
+function renderProductCard(product, idx, shop, options = {}) {
+  // options: { showShopName, showAddToCart, showQuickView, showFavorite, onAddToCart, onQuickView, onFavorite }
+  const stock = product.inStock ? (typeof product.stock === 'number' ? product.stock : getRandomStock()) : 0;
+  return `
+    <div class="group bg-white dark:bg-darkCard rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden animate-fadeIn card-3d product-card" tabindex="0" aria-label="View details for ${product.name}" data-product-idx="${idx}">
+      <div class="relative overflow-hidden">
+        <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300 product-img-zoom"/>
+        ${product.discount > 0 ? `
+          <div class="absolute top-3 left-3">
+            <span class="bg-error text-white px-2 py-1 rounded-full text-xs font-bold">
+              -${product.discount}%
+            </span>
+          </div>
+        ` : ''}
+        ${stock > 0 && stock <= 3 ? `
+          <div class="absolute top-3 right-3">
+            <span class="bg-warning text-white px-2 py-1 rounded-full text-xs font-bold animate-pulse">
+              Only ${stock} left!
+            </span>
+          </div>
+        ` : ''}
+        ${!product.inStock ? `
+          <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <span class="bg-white text-gray-900 px-3 py-1 rounded-full text-sm font-semibold">
+              Out of Stock
+            </span>
+          </div>
+        ` : ''}
+      </div>
+      <div class="p-6">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-accent transition-colors duration-200">
+          ${product.name}
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+          ${product.description || ''}
+        </p>
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-2">
+            <span class="text-2xl font-bold text-primary dark:text-accent">₹${product.price}</span>
+            ${product.originalPrice > product.price ? `
+              <span class="text-gray-500 dark:text-gray-400 line-through">₹${product.originalPrice}</span>
+            ` : ''}
+          </div>
+        </div>
+        ${options.showAddToCart !== false ? `
+        <button 
+          class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2 ${!product.inStock ? 'opacity-60 cursor-not-allowed' : ''} add-to-cart-btn"
+          ${!product.inStock ? 'disabled' : ''}
+          data-product-idx="${idx}"
+        >
+          <i class="fas fa-shopping-cart"></i>
+          <span>${product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
+        </button>
+        ` : ''}
+      </div>
+    </div>
+  `;
+}
+
 function renderShopDetails() {
   const shopId = getShopIdFromURL();
   const shop = shops.find(s => s.id === shopId);
@@ -226,59 +286,7 @@ function renderShopDetails() {
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         ${shop.products.map((product, idx) => {
-          const stock = product.inStock ? getRandomStock() : 0;
-          return `
-          <div class="group bg-white dark:bg-darkCard rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden animate-fadeIn card-3d product-card" tabindex="0" aria-label="View details for ${product.name}" data-product-idx="${idx}">
-            <div class="relative overflow-hidden">
-              <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300 product-img-zoom"/>
-              ${product.discount > 0 ? `
-                <div class="absolute top-3 left-3">
-                  <span class="bg-error text-white px-2 py-1 rounded-full text-xs font-bold">
-                    -${product.discount}%
-                  </span>
-                </div>
-              ` : ''}
-              ${stock > 0 && stock <= 3 ? `
-                <div class="absolute top-3 right-3">
-                  <span class="bg-warning text-white px-2 py-1 rounded-full text-xs font-bold animate-pulse">
-                    Only ${stock} left!
-                  </span>
-                </div>
-              ` : ''}
-              ${!product.inStock ? `
-                <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
-                  <span class="bg-white text-gray-900 px-3 py-1 rounded-full text-sm font-semibold">
-                    Out of Stock
-                  </span>
-                </div>
-              ` : ''}
-            </div>
-            <div class="p-6">
-              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-accent transition-colors duration-200">
-                ${product.name}
-              </h3>
-              <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
-                ${product.description || ''}
-              </p>
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center space-x-2">
-                  <span class="text-2xl font-bold text-primary dark:text-accent">₹${product.price}</span>
-                  ${product.originalPrice > product.price ? `
-                    <span class="text-gray-500 dark:text-gray-400 line-through">₹${product.originalPrice}</span>
-                  ` : ''}
-                </div>
-              </div>
-              <button 
-                class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2 ${!product.inStock ? 'opacity-60 cursor-not-allowed' : ''} add-to-cart-btn"
-                ${!product.inStock ? 'disabled' : ''}
-                data-product-idx="${idx}"
-              >
-                <i class="fas fa-shopping-cart"></i>
-                <span>${product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
-              </button>
-            </div>
-          </div>
-          `;
+          return renderProductCard(product, idx, shop, { showAddToCart: true });
         }).join("")}
       </div>
     </div>
