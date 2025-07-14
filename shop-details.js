@@ -2,7 +2,8 @@
 
 function getShopIdFromURL() {
   const params = new URLSearchParams(window.location.search);
-  return parseInt(params.get("shopId"));
+  // Accept both ?shopId= and ?id= for maximum compatibility
+  return parseInt(params.get("shopId") || params.get("id"));
 }
 
 function showNotification(message, type = 'info') {
