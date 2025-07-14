@@ -243,7 +243,7 @@ function createShopCard(shop, index) {
   
   // Add click handler
   card.addEventListener('click', () => {
-    window.location.href = `shop-details.html?id=${shop.id}`;
+    window.location.href = `shop-details.html?shopId=${shop.id}`;
   });
   
   return card;
