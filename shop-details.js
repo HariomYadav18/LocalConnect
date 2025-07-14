@@ -1,5 +1,28 @@
 
 
+// --- Universal Loader and Debug Output ---
+(function universalShopLoader() {
+  function ready() {
+    return document.readyState === 'complete' || document.readyState === 'interactive';
+  }
+  function waitForDOMAndShops(cb, tries = 0) {
+    if (!ready()) {
+      return setTimeout(() => waitForDOMAndShops(cb, tries + 1), 30);
+    }
+    if (typeof shops === 'undefined') {
+      if (tries > 30) {
+        const c = document.getElementById('shop-container');
+        if (c) c.innerHTML = '<div class="text-center py-12 text-error">Critical error: Shop data could not be loaded. Please refresh or contact support.</div>';
+        console.error('CRITICAL: shops is undefined after waiting.');
+        return;
+      }
+      return setTimeout(() => waitForDOMAndShops(cb, tries + 1), 30);
+    }
+    cb();
+  }
+  waitForDOMAndShops(renderShopDetails);
+})();
+
 function getShopIdFromURL() {
   const params = new URLSearchParams(window.location.search);
   // Try all possible keys
@@ -233,79 +256,40 @@ function renderProductCard(product, idx, shop, options = {}) {
 
 function renderShopDetails() {
   // Debug output
-  console.log('DEBUG: shopId:', getShopIdFromURL && getShopIdFromURL());
+  const shopId = getShopIdFromURL();
+  console.log('DEBUG: shopId:', shopId);
   console.log('DEBUG: typeof shops:', typeof shops, Array.isArray(shops), shops && shops.length, shops);
-
-  // Wait for DOM and shops
+  const container = document.getElementById('shop-container');
+  if (!container) {
+    setTimeout(renderShopDetails, 30);
+    return;
+  }
   if (typeof shops === 'undefined') {
-    // Fallback after 1s if shops is still undefined
-    setTimeout(() => {
-      if (typeof shops === 'undefined') {
-        const container = document.getElementById('shop-container');
-        if (container) {
-          container.innerHTML = '<div class="text-center py-12 text-error">Critical error: Shop data could not be loaded. Please check your internet connection or contact support.</div>';
-        }
-      }
-    }, 1000);
-    setTimeout(renderShopDetails, 50);
+    container.innerHTML = '<div class="text-center py-12 text-error">Critical error: Shop data could not be loaded. Please refresh or contact support.</div>';
     return;
   }
   if (!Array.isArray(shops)) {
-    const container = document.getElementById('shop-container');
-    if (container) {
-      container.innerHTML = '<div class="text-center py-12 text-error">Critical error: Shop data is not in the correct format.</div>';
-    }
+    container.innerHTML = '<div class="text-center py-12 text-error">Critical error: Shop data is malformed.</div>';
     return;
   }
-  if (!document.getElementById('shop-container')) {
-    setTimeout(renderShopDetails, 50);
+  if (!shopId || isNaN(shopId)) {
+    container.innerHTML = `<div class="text-center py-12"><div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-gray-400 text-3xl"></i></div><h3 class="text-xl font-semibold mb-2">Invalid shop link</h3><p class="text-gray-500 dark:text-gray-400">The shop link is missing or invalid. Please check the URL or return to the homepage.</p></div>`;
     return;
   }
   if (shops.length === 0) {
-    const container = document.getElementById('shop-container');
-    if (container) {
-      container.innerHTML = '<div class="text-center py-12">No shops available. Please check back later.</div>';
-    }
+    container.innerHTML = '<div class="text-center py-12 text-error">No shops available. Please check back later.</div>';
     return;
   }
-  const shopId = getShopIdFromURL();
-  const container = document.getElementById("shop-container");
-
-  // Validate shopId
-  if (!shopId || isNaN(shopId)) {
-    container.innerHTML = `
-      <div class="text-center py-12">
-        <div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-          <i class="fas fa-exclamation-triangle text-gray-400 text-3xl"></i>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Invalid shop link</h3>
-        <p class="text-gray-600 dark:text-gray-400 mb-6">No shop selected. Please choose a shop from the homepage.</p>
-        <a href="index.html" class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-xl font-semibold hover:from-secondary hover:to-primary transition-all duration-300">
-          Back to Home
-        </a>
-      </div>
-    `;
-    return;
-  }
-
-  // Find shop
-  const shop = shops.find(s => Number(s.id) === Number(shopId));
+  const shop = shops.find(s => Number(s.id) === shopId);
+  console.log('DEBUG: shop:', shop);
   if (!shop) {
-    container.innerHTML = `
-      <div class="text-center py-12">
-        <div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-          <i class="fas fa-exclamation-triangle text-gray-400 text-3xl"></i>
-        </div>
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Shop not found</h3>
-        <p class="text-gray-600 dark:text-gray-400 mb-6">The shop you're looking for doesn't exist or has been removed.</p>
-        <a href="index.html" class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-xl font-semibold hover:from-secondary hover:to-primary transition-all duration-300">
-          Back to Home
-        </a>
-      </div>
-    `;
+    container.innerHTML = `<div class="text-center py-12"><div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-store-slash text-gray-400 text-3xl"></i></div><h3 class="text-xl font-semibold mb-2">Shop not found</h3><p class="text-gray-500 dark:text-gray-400">The shop you are looking for does not exist. Please check the link or return to the homepage.</p></div>`;
     return;
   }
-
+  if (!Array.isArray(shop.products) || shop.products.length === 0) {
+    container.innerHTML = `<div class="text-center py-12"><div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-box-open text-gray-400 text-3xl"></i></div><h3 class="text-xl font-semibold mb-2">No products available</h3><p class="text-gray-500 dark:text-gray-400">This shop currently has no products listed. Please check back later or browse other shops.</p></div>`;
+    return;
+  }
   container.innerHTML = `
     <div class="bg-white dark:bg-darkCard rounded-2xl shadow-lg overflow-hidden mb-8">
       <div class="relative h-64 md:h-80">
