@@ -512,5 +512,11 @@ function initializeShopDetailsPage() {
   renderShopDetails();
 }
 
-// Ensure theme is initialized on every navigation
-window.addEventListener('DOMContentLoaded', initializeTheme);
+// Ensure shop details are rendered on every navigation
+window.addEventListener('DOMContentLoaded', () => {
+  initializeTheme();
+  updateCartBadge();
+  setupFAB();
+  renderShopDetails();
+});
+window.addEventListener('popstate', renderShopDetails);
