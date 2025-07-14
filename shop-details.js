@@ -28,6 +28,73 @@ function showNotification(message, type = 'info') {
   }, 3000);
 }
 
+// Confetti animation
+function createConfettiBurst() {
+  const colors = ['#FF6B35', '#F7931E', '#FFD23F', '#2ECC71', '#E74C3C'];
+  for (let i = 0; i < 30; i++) {
+    const confetti = document.createElement('div');
+    confetti.style.position = 'fixed';
+    confetti.style.left = (window.innerWidth / 2 + (Math.random() - 0.5) * 200) + 'px';
+    confetti.style.top = (window.innerHeight / 2 + (Math.random() - 0.5) * 50) + 'px';
+    confetti.style.width = '10px';
+    confetti.style.height = '10px';
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.borderRadius = '50%';
+    confetti.style.pointerEvents = 'none';
+    confetti.style.zIndex = '9999';
+    confetti.style.opacity = '0.85';
+    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+    confetti.style.animation = `confetti-pop 1.2s cubic-bezier(0.4,0,0.2,1) forwards`;
+    confetti.style.animationDelay = (Math.random() * 0.3) + 's';
+    document.body.appendChild(confetti);
+    setTimeout(() => confetti.remove(), 1400);
+  }
+}
+
+// Add to Cart Popup
+function showCartPopup(product, shop) {
+  const container = document.getElementById('cart-popup-container');
+  if (!container) return;
+  container.innerHTML = `
+    <div id="cart-popup" class="fixed inset-0 flex items-center justify-center z-[9999] bg-black/30 backdrop-blur-sm animate-fadeIn">
+      <div class="bg-white dark:bg-darkCard rounded-2xl shadow-2xl p-8 max-w-xs w-full text-center relative animate-bounceIn">
+        <button id="close-cart-popup" class="absolute top-3 right-3 text-gray-400 hover:text-error text-xl focus:outline-none">&times;</button>
+        <div class="flex flex-col items-center">
+          <div class="w-16 h-16 bg-gradient-to-br from-success to-green-400 rounded-full flex items-center justify-center mb-4 animate-bounceIn">
+            <i class="fas fa-check text-white text-3xl"></i>
+          </div>
+          <img src="${product.image}" alt="${product.name}" class="w-16 h-16 object-cover rounded-xl mb-2 shadow-md">
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">${product.name}</h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-4">Added to cart!</p>
+          <div class="flex gap-2 w-full">
+            <a href="cart.html" class="flex-1 bg-gradient-to-r from-primary to-secondary text-white py-2 rounded-xl font-semibold hover:from-secondary hover:to-primary transition-all duration-300">View Cart</a>
+            <button id="continue-shopping" class="flex-1 bg-gray-100 dark:bg-darkBorder text-gray-900 dark:text-white py-2 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300">Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <style>
+      @keyframes confetti-pop {
+        0% { opacity: 0.85; transform: scale(0.7) translateY(0); }
+        60% { opacity: 1; transform: scale(1.1) translateY(-40px); }
+        100% { opacity: 0; transform: scale(0.8) translateY(80px); }
+      }
+      .animate-bounceIn { animation: bounceIn 0.7s cubic-bezier(0.68,-0.55,0.27,1.55); }
+      @keyframes bounceIn {
+        0% { opacity: 0; transform: scale(0.3); }
+        50% { opacity: 1; transform: scale(1.05); }
+        70% { transform: scale(0.9); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+    </style>
+  `;
+  // Close logic
+  document.getElementById('close-cart-popup').onclick = () => container.innerHTML = '';
+  document.getElementById('continue-shopping').onclick = () => container.innerHTML = '';
+  // Auto-dismiss after 2.5s
+  setTimeout(() => { container.innerHTML = ''; }, 2500);
+}
+
 function addToCart(product, shop) {
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
   const existing = cart.find(item => item.productName === product.name && item.shopId === shop.id);
@@ -45,8 +112,9 @@ function addToCart(product, shop) {
     });
   }
   localStorage.setItem('cart', JSON.stringify(cart));
-  showNotification(`${product.name} added to cart!`, 'success');
-  updateCartBadge();
+  updateCartBadge(true);
+  showCartPopup(product, shop);
+  createConfettiBurst();
 }
 
 function renderShopDetails() {
@@ -180,14 +248,18 @@ function initializeTheme() {
   }
 }
 
-// Update cart badge
-function updateCartBadge() {
+// Enhance cart badge with animation
+function updateCartBadge(animated) {
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
   const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
   const badge = document.getElementById('cart-badge');
   if (badge) {
     badge.textContent = totalItems;
     badge.style.display = totalItems > 0 ? 'flex' : 'none';
+    if (animated && totalItems > 0) {
+      badge.classList.add('animate-bounce');
+      setTimeout(() => badge.classList.remove('animate-bounce'), 1000);
+    }
   }
 }
 
