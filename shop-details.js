@@ -5,6 +5,50 @@ function getShopIdFromURL() {
   return parseInt(params.get("shopId"));
 }
 
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg transition-all duration-300 transform translate-x-full`;
+  const bgColor = type === 'success' ? 'bg-success' : 'bg-primary';
+  const icon = type === 'success' ? 'fas fa-check' : 'fas fa-info';
+  notification.innerHTML = `
+    <div class="flex items-center space-x-3 ${bgColor} text-white px-4 py-3 rounded-xl">
+      <i class="${icon}"></i>
+      <span class="font-medium">${message}</span>
+    </div>
+  `;
+  document.body.appendChild(notification);
+  setTimeout(() => {
+    notification.classList.remove('translate-x-full');
+  }, 100);
+  setTimeout(() => {
+    notification.classList.add('translate-x-full');
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 300);
+  }, 3000);
+}
+
+function addToCart(product, shop) {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const existing = cart.find(item => item.productName === product.name && item.shopId === shop.id);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({
+      productName: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      qty: 1,
+      shopId: shop.id,
+      shopName: shop.name,
+      image: product.image
+    });
+  }
+  localStorage.setItem('cart', JSON.stringify(cart));
+  showNotification(`${product.name} added to cart!`, 'success');
+  updateCartBadge();
+}
+
 function renderShopDetails() {
   const shopId = getShopIdFromURL();
   const shop = shops.find(s => s.id === shopId);
@@ -69,6 +113,20 @@ function renderShopDetails() {
           <div class="group bg-white dark:bg-darkCard rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden animate-fadeIn">
             <div class="relative overflow-hidden">
               <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"/>
+              ${product.discount > 0 ? `
+                <div class="absolute top-3 left-3">
+                  <span class="bg-error text-white px-2 py-1 rounded-full text-xs font-bold">
+                    -${product.discount}%
+                  </span>
+                </div>
+              ` : ''}
+              ${!product.inStock ? `
+                <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+                  <span class="bg-white text-gray-900 px-3 py-1 rounded-full text-sm font-semibold">
+                    Out of Stock
+                  </span>
+                </div>
+              ` : ''}
             </div>
             <div class="p-6">
               <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-accent transition-colors duration-200">
@@ -79,9 +137,20 @@ function renderShopDetails() {
               </p>
               <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center space-x-2">
-                  <span class="text-2xl font-bold text-primary dark:text-accent"> 9${product.price}</span>
+                  <span class="text-2xl font-bold text-primary dark:text-accent">₹${product.price}</span>
+                  ${product.originalPrice > product.price ? `
+                    <span class="text-gray-500 dark:text-gray-400 line-through">₹${product.originalPrice}</span>
+                  ` : ''}
                 </div>
               </div>
+              <button 
+                class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2 ${!product.inStock ? 'opacity-60 cursor-not-allowed' : ''}"
+                ${!product.inStock ? 'disabled' : ''}
+                onclick='window.addToCart && addToCart(${JSON.stringify(product)}, ${JSON.stringify(shop)})'
+              >
+                <i class="fas fa-shopping-cart"></i>
+                <span>${product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
+              </button>
             </div>
           </div>
         `).join("")}
