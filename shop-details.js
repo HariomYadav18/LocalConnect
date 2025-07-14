@@ -90,4 +90,54 @@ function renderShopDetails() {
   `;
 }
 
-document.addEventListener('DOMContentLoaded', renderShopDetails);
+// --- Advanced Features and Dark Mode Logic ---
+
+// Dark mode toggle
+function toggleDarkMode() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('localconnect_theme', isDark ? 'dark' : 'light');
+  const themeIcon = document.getElementById('theme-icon');
+  if (themeIcon) {
+    themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-700';
+  }
+}
+
+// Initialize theme on page load
+function initializeTheme() {
+  if (localStorage.getItem('localconnect_theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+    const themeIcon = document.getElementById('theme-icon');
+    if (themeIcon) themeIcon.className = 'fas fa-sun text-gray-300';
+  }
+}
+
+// Update cart badge
+function updateCartBadge() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  const badge = document.getElementById('cart-badge');
+  if (badge) {
+    badge.textContent = totalItems;
+    badge.style.display = totalItems > 0 ? 'flex' : 'none';
+  }
+}
+
+// Floating Action Button (FAB) - show help message
+function setupFAB() {
+  const fab = document.getElementById('fab');
+  if (fab) {
+    fab.addEventListener('click', () => {
+      alert('Need help? Contact the developer at hariomydv1844@gmail.com');
+    });
+  }
+}
+
+// Initialize all features on DOMContentLoaded
+function initializeShopDetailsPage() {
+  initializeTheme();
+  updateCartBadge();
+  setupFAB();
+  renderShopDetails();
+}
+
+document.addEventListener('DOMContentLoaded', initializeShopDetailsPage);
