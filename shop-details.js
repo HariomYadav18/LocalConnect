@@ -175,26 +175,18 @@ function getRandomStock() {
 // --- Unified Product Card Renderer ---
 function renderProductCard(product, idx, shop, options = {}) {
   const stock = product.inStock ? (typeof product.stock === 'number' ? product.stock : getRandomStock()) : 0;
-  const hasDiscount = product.discount > 0 && product.originalPrice > product.price;
   return `
     <div class="group bg-white dark:bg-darkCard rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden animate-fadeIn card-3d product-card" tabindex="0" aria-label="View details for ${product.name}" data-product-idx="${idx}">
       <div class="relative overflow-hidden">
         <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300 product-img-zoom"/>
-        ${hasDiscount ? `
+        ${product.discount > 0 ? `
           <div class="absolute top-3 left-3">
             <span class="bg-error text-white px-2 py-1 rounded-full text-xs font-bold">
               -${product.discount}%
             </span>
           </div>
         ` : ''}
-        ${product.inStock && stock > 3 ? `
-          <div class="absolute top-3 right-3">
-            <span class="bg-success text-white px-2 py-1 rounded-full text-xs font-bold">
-              In Stock
-            </span>
-          </div>
-        ` : ''}
-        ${product.inStock && stock > 0 && stock <= 3 ? `
+        ${stock > 0 && stock <= 3 ? `
           <div class="absolute top-3 right-3">
             <span class="bg-warning text-white px-2 py-1 rounded-full text-xs font-bold animate-pulse">
               Only ${stock} left!
@@ -202,8 +194,8 @@ function renderProductCard(product, idx, shop, options = {}) {
           </div>
         ` : ''}
         ${!product.inStock ? `
-          <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
-            <span class="bg-error text-white px-3 py-1 rounded-full text-sm font-semibold">
+          <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <span class="bg-white text-gray-900 px-3 py-1 rounded-full text-sm font-semibold">
               Out of Stock
             </span>
           </div>
@@ -219,7 +211,7 @@ function renderProductCard(product, idx, shop, options = {}) {
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center space-x-2">
             <span class="text-2xl font-bold text-primary dark:text-accent">₹${product.price}</span>
-            ${hasDiscount ? `
+            ${product.originalPrice > product.price ? `
               <span class="text-gray-500 dark:text-gray-400 line-through">₹${product.originalPrice}</span>
             ` : ''}
           </div>
@@ -229,7 +221,6 @@ function renderProductCard(product, idx, shop, options = {}) {
           class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2 ${!product.inStock ? 'opacity-60 cursor-not-allowed' : ''} add-to-cart-btn"
           ${!product.inStock ? 'disabled' : ''}
           data-product-idx="${idx}"
-          aria-label="${product.inStock ? 'Add to Cart' : 'Out of Stock'}"
         >
           <i class="fas fa-shopping-cart"></i>
           <span>${product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
@@ -385,7 +376,6 @@ function openProductModal(shop, product) {
   // Demo: random reviews and stock
   const reviews = DEMO_REVIEWS.slice(0, Math.floor(Math.random() * DEMO_REVIEWS.length) + 1);
   const stock = product.inStock ? getRandomStock() : 0;
-  const hasDiscount = product.discount > 0 && product.originalPrice > product.price;
   container.innerHTML = `
     <div id="product-modal" class="fixed inset-0 flex items-center justify-center z-[9999] bg-black/40 backdrop-blur-sm animate-fadeIn">
       <div class="bg-white dark:bg-darkCard rounded-2xl shadow-2xl p-8 max-w-md w-full text-center relative animate-bounceIn outline-none" tabindex="0" aria-modal="true" role="dialog">
@@ -395,15 +385,14 @@ function openProductModal(shop, product) {
           <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">${product.name}</h3>
           <div class="flex items-center justify-center mb-2">
             <span class="text-2xl font-bold text-primary dark:text-accent">₹${product.price}</span>
-            ${hasDiscount ? `<span class="ml-2 text-gray-500 dark:text-gray-400 line-through">₹${product.originalPrice}</span>` : ''}
-            ${hasDiscount ? `<span class="ml-2 bg-error text-white px-2 py-1 rounded-full text-xs font-bold">-${product.discount}%</span>` : ''}
+            ${product.originalPrice > product.price ? `<span class="ml-2 text-gray-500 dark:text-gray-400 line-through">₹${product.originalPrice}</span>` : ''}
+            ${product.discount > 0 ? `<span class="ml-2 bg-error text-white px-2 py-1 rounded-full text-xs font-bold">-${product.discount}%</span>` : ''}
           </div>
-          ${product.inStock && stock > 3 ? `<div class="mb-2"><span class="bg-success text-white px-2 py-1 rounded-full text-xs font-bold">In Stock</span></div>` : ''}
-          ${product.inStock && stock > 0 && stock <= 3 ? `<div class="mb-2"><span class="bg-warning text-white px-2 py-1 rounded-full text-xs font-bold animate-pulse">Only ${stock} left!</span></div>` : ''}
+          ${stock > 0 && stock <= 3 ? `<div class="mb-2"><span class="bg-warning text-white px-2 py-1 rounded-full text-xs font-bold animate-pulse">Only ${stock} left!</span></div>` : ''}
           ${!product.inStock ? `<div class="mb-2"><span class="bg-error text-white px-2 py-1 rounded-full text-xs font-bold">Out of Stock</span></div>` : ''}
           <p class="text-gray-600 dark:text-gray-300 mb-4">${product.description || ''}</p>
           <div class="flex items-center justify-center mb-4">
-            <button class="mr-2 bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-xl font-semibold transition-all duration-300 hover:from-secondary hover:to-primary add-to-cart-btn-modal" ${!product.inStock ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : ''}>Add to Cart</button>
+            <button class="mr-2 bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-xl font-semibold transition-all duration-300 hover:from-secondary hover:to-primary add-to-cart-btn-modal" ${!product.inStock ? 'disabled style=\"opacity:0.6;cursor:not-allowed;\"' : ''}>Add to Cart</button>
             <button class="ml-2 bg-gray-100 dark:bg-darkBorder text-gray-900 dark:text-white px-4 py-2 rounded-xl font-semibold transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 favorite-btn-modal">
               <i class="fas fa-heart ${isProductFavorite(shop, product) ? 'text-red-500 scale-110' : 'text-gray-400'}"></i>
             </button>
