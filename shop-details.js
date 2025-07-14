@@ -226,14 +226,21 @@ function renderProductCard(product, idx, shop, options = {}) {
 }
 
 function renderShopDetails() {
-  // Defensive: Wait for shops to be defined
+  // Wait for DOM and shops
   if (typeof shops === 'undefined' || !Array.isArray(shops)) {
-    setTimeout(renderShopDetails, 50); // Try again shortly
+    setTimeout(renderShopDetails, 50);
+    return;
+  }
+  if (!document.getElementById('shop-container')) {
+    setTimeout(renderShopDetails, 50);
     return;
   }
   const shopId = getShopIdFromURL();
+  const container = document.getElementById("shop-container");
+
+  // Validate shopId
   if (!shopId || isNaN(shopId)) {
-    document.getElementById("shop-container").innerHTML = `
+    container.innerHTML = `
       <div class="text-center py-12">
         <div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
           <i class="fas fa-exclamation-triangle text-gray-400 text-3xl"></i>
@@ -247,9 +254,9 @@ function renderShopDetails() {
     `;
     return;
   }
-  const shop = shops.find(s => s.id === shopId);
-  const container = document.getElementById("shop-container");
 
+  // Find shop
+  const shop = shops.find(s => Number(s.id) === Number(shopId));
   if (!shop) {
     container.innerHTML = `
       <div class="text-center py-12">
