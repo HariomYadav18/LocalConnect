@@ -156,6 +156,7 @@ function toggleDarkMode() {
     themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-700';
   }
 }
+window.toggleDarkMode = toggleDarkMode;
 
 function initializeTheme() {
   if (localStorage.getItem('localconnect_theme') === 'dark') {
