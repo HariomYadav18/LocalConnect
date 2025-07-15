@@ -152,7 +152,8 @@ function addToCart(product, shop, btn, productIndex) {
       qty,
       productName: product.name,
       price: Number(product.price),
-      shopName: shop.name
+      shopName: shop.name,
+      image: product.image
     });
   }
   localStorage.setItem('cart', JSON.stringify(cart));
