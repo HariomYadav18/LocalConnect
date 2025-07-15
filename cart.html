@@ -180,23 +180,27 @@
             <form id="checkout-form" class="space-y-6">
               <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label for="checkout-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Full Name
                   </label>
                   <input 
+                    id="checkout-name"
                     name="name" 
                     type="text" 
+                    autocomplete="name"
                     class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300" 
                     required 
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label for="checkout-phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Phone Number
                   </label>
                   <input 
+                    id="checkout-phone"
                     name="phone" 
                     type="tel" 
+                    autocomplete="tel"
                     class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300" 
                     required 
                   />
@@ -204,11 +208,13 @@
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label for="checkout-address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Delivery Address
                 </label>
                 <textarea 
+                  id="checkout-address"
                   name="address" 
+                  autocomplete="street-address"
                   rows="4" 
                   class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300" 
                   placeholder="Enter your complete delivery address..."
@@ -218,23 +224,27 @@
 
               <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label for="checkout-city" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     City
                   </label>
                   <input 
+                    id="checkout-city"
                     name="city" 
                     type="text" 
+                    autocomplete="address-level2"
                     class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300" 
                     required 
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label for="checkout-pincode" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Pincode
                   </label>
                   <input 
+                    id="checkout-pincode"
                     name="pincode" 
                     type="text" 
+                    autocomplete="postal-code"
                     class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300" 
                     required 
                   />
@@ -242,11 +252,13 @@
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label for="checkout-instructions" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Delivery Instructions (Optional)
                 </label>
                 <textarea 
+                  id="checkout-instructions"
                   name="instructions" 
+                  autocomplete="off"
                   rows="2" 
                   class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300" 
                   placeholder="Any special delivery instructions..."
