@@ -11,21 +11,29 @@
       theme: {
         extend: {
           colors: {
-            primary: '#3B82F6',
-            accent: '#60A5FA',
+            primary: '#FF6B35',
+            secondary: '#F7931E',
+            accent: '#FFD23F',
             darkBg: '#111827',
             successGreen: '#22c55e'
           },
           fontFamily: {
-            sans: ['Inter', 'sans-serif']
+            sans: ['Inter', 'sans-serif'],
+            display: ['Poppins', 'system-ui', 'sans-serif']
           },
           animation: {
             fadeIn: 'fadeIn 0.4s ease-out',
+            bounceIn: 'bounceIn 0.5s ease-out',
           },
           keyframes: {
             fadeIn: {
               '0%': { opacity: 0, transform: 'translateY(10px)' },
               '100%': { opacity: 1, transform: 'translateY(0)' }
+            },
+            bounceIn: {
+              '0%': { transform: 'scale(0.9)', opacity: 0.3 },
+              '50%': { transform: 'scale(1.05)' },
+              '100%': { transform: 'scale(1)', opacity: 1 }
             }
           }
         }
