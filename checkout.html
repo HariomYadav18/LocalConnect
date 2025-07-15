@@ -5,160 +5,160 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout - LocalConnect</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            primary: '#3B82F6',
-            accent: '#60A5FA',
-            darkBg: '#111827'
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 dark:bg-darkBg text-gray-800 dark:text-gray-100 font-sans">
+<body class="bg-gray-50 dark:bg-darkBg text-gray-900 dark:text-gray-100 font-sans transition-all duration-300">
 
-  <nav class="bg-white dark:bg-gray-800 shadow px-6 py-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-primary dark:text-accent">LocalConnect</h1>
-    <button onclick="document.documentElement.classList.toggle('dark')" class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-1 rounded-md text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition">Toggle Mode</button>
+  <!-- Enhanced Navbar -->
+  <nav class="bg-white/95 dark:bg-darkCard/95 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-darkBorder sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+          <a href="index.html" class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg">
+              <i class="fas fa-store text-white text-lg" aria-hidden="true"></i>
+            </div>
+            <h1 class="text-2xl font-display font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              LocalConnect
+            </h1>
+          </a>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
+            <i class="fas fa-home text-sm" aria-hidden="true"></i>
+            <span>Home</span>
+          </a>
+          <a href="cart.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
+            <i class="fas fa-shopping-cart text-sm" aria-hidden="true"></i>
+            <span>Cart</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </nav>
 
-  <main class="max-w-4xl mx-auto px-6 py-10">
-    <h2 class="text-3xl font-bold text-primary dark:text-accent mb-6">Your Cart</h2>
-
-    <div class="bg-white dark:bg-gray-800 shadow rounded-lg mb-6 overflow-hidden">
-      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead class="bg-indigo-50 dark:bg-gray-700">
-          <tr>
-            <th class="px-6 py-3 text-left text-sm font-medium">Product</th>
-            <th class="px-6 py-3 text-left text-sm font-medium">Quantity</th>
-            <th class="px-6 py-3 text-left text-sm font-medium">Price</th>
-            <th class="px-6 py-3 text-left text-sm font-medium">Action</th>
-          </tr>
-        </thead>
-        <tbody id="cart-body" class="divide-y divide-gray-100 dark:divide-gray-700"></tbody>
-      </table>
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 animate-fadeIn">
+    <div class="grid md:grid-cols-2 gap-10">
+      <!-- Order Summary -->
+      <div>
+        <h2 class="text-2xl font-bold mb-6 text-primary dark:text-accent">Order Summary</h2>
+        <div id="order-summary" class="bg-white dark:bg-darkCard rounded-2xl shadow-lg p-6 mb-6">
+          <!-- Order summary will be rendered here -->
+        </div>
+        <a href="cart.html" class="text-primary dark:text-accent hover:underline text-sm font-medium">
+          &larr; Back to Cart
+        </a>
+      </div>
+      <!-- Checkout Form -->
+      <div>
+        <h2 class="text-2xl font-bold mb-6 text-primary dark:text-accent">Delivery Details</h2>
+        <form id="checkout-form" class="bg-white dark:bg-darkCard rounded-2xl shadow-lg p-6 space-y-6">
+          <div>
+            <label for="checkout-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
+            <input id="checkout-name" name="name" type="text" autocomplete="name" required class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300" />
+          </div>
+          <div>
+            <label for="checkout-phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number</label>
+            <input id="checkout-phone" name="phone" type="tel" autocomplete="tel" required class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300" />
+          </div>
+          <div>
+            <label for="checkout-address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Delivery Address</label>
+            <textarea id="checkout-address" name="address" autocomplete="street-address" rows="3" required class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300"></textarea>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label for="checkout-city" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">City</label>
+              <input id="checkout-city" name="city" type="text" autocomplete="address-level2" required class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300" />
+            </div>
+            <div>
+              <label for="checkout-pincode" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pincode</label>
+              <input id="checkout-pincode" name="pincode" type="text" autocomplete="postal-code" required class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300" />
+            </div>
+          </div>
+          <div>
+            <label for="checkout-instructions" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Delivery Instructions (Optional)</label>
+            <textarea id="checkout-instructions" name="instructions" autocomplete="off" rows="2" class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300"></textarea>
+          </div>
+          <button type="submit" class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2">
+            <span>Place Order</span>
+            <i class="fas fa-credit-card"></i>
+          </button>
+        </form>
+      </div>
     </div>
-
-    <div class="flex justify-between items-center mb-6">
-      <p id="total-price" class="text-lg font-semibold">Total: ₹0</p>
-      <button id="clear-cart" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Clear Cart</button>
-    </div>
-
-    <form id="checkout-form" class="bg-white dark:bg-gray-800 p-6 rounded shadow space-y-4">
-      <div>
-        <label class="block mb-1 text-sm font-medium">Name</label>
-        <input required name="name" class="w-full px-4 py-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600" />
-      </div>
-      <div>
-        <label class="block mb-1 text-sm font-medium">Address</label>
-        <textarea required name="address" class="w-full px-4 py-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600"></textarea>
-      </div>
-      <div>
-        <label class="block mb-1 text-sm font-medium">Phone</label>
-        <input type="tel" required name="phone" class="w-full px-4 py-2 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600" />
-      </div>
-      <button type="submit" class="w-full bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded">Place Order</button>
-    </form>
   </main>
 
- <script>
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  const cartBody = document.getElementById("cart-body");
-  const totalPriceEl = document.getElementById("total-price");
-
-  function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }
-
-  function renderCartItems() {
-    cartBody.innerHTML = "";
-    let total = 0;
-
+  <script src="shops.js" defer></script>
+  <script>
+  // Render order summary from cart
+  function renderOrderSummary() {
+    const summaryDiv = document.getElementById('order-summary');
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (!summaryDiv) return;
     if (cart.length === 0) {
-      cartBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-500">Cart is empty.</td></tr>`;
-      totalPriceEl.textContent = "Total: ₹0";
+      summaryDiv.innerHTML = '<div class="text-gray-500">Your cart is empty.</div>';
       return;
     }
-
-    cart.forEach((item, index) => {
-      const subtotal = item.price * item.qty;
-      total += subtotal;
-
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td class="px-6 py-4">
-          ${item.productName || item.name}
-          <div class="text-sm text-gray-500">${item.shopName || ''}</div>
-        </td>
-        <td class="px-6 py-4">${item.qty}</td>
-        <td class="px-6 py-4">₹${subtotal}</td>
-        <td class="px-6 py-4"><button class="text-red-500 remove" data-index="${index}">Remove</button></td>
-      `;
-      cartBody.appendChild(row);
-    });
-
-    totalPriceEl.textContent = `Total: ₹${total.toFixed(2)}`;
-    attachEvents();
+    let subtotal = 0;
+    let itemsHTML = cart.map(item => {
+      const line = `<div class=\"flex justify-between py-1\">
+        <span>${item.productName} × ${item.qty}</span>
+        <span>₹${item.price * item.qty}</span>
+      </div>`;
+      subtotal += item.price * item.qty;
+      return line;
+    }).join('');
+    const delivery = 20;
+    const total = subtotal + delivery;
+    summaryDiv.innerHTML = `
+      <h4 class=\"font-semibold mb-2\">Order Summary</h4>
+      ${itemsHTML}
+      <div class=\"flex justify-between border-t pt-2 mt-2 font-bold\">
+        <span>Subtotal</span>
+        <span>₹${subtotal}</span>
+      </div>
+      <div class=\"flex justify-between pt-1\">
+        <span>Delivery</span>
+        <span>₹${delivery}</span>
+      </div>
+      <div class=\"flex justify-between border-t pt-2 mt-2 font-bold text-lg\">
+        <span>Total</span>
+        <span>₹${total}</span>
+      </div>
+    `;
   }
-
-  function attachEvents() {
-    document.querySelectorAll(".remove").forEach(btn => {
-      btn.onclick = e => {
-        cart.splice(e.target.dataset.index, 1);
-        saveCart();
-        renderCartItems();
+  document.addEventListener('DOMContentLoaded', renderOrderSummary);
+  </script>
+  <script>
+  // Handle checkout form submission
+  document.addEventListener('DOMContentLoaded', function() {
+    var checkoutForm = document.getElementById('checkout-form');
+    if (checkoutForm) {
+      checkoutForm.onsubmit = function(e) {
+        e.preventDefault();
+        // Gather form data
+        const formData = new FormData(checkoutForm);
+        const orderData = {
+          name: formData.get('name'),
+          phone: formData.get('phone'),
+          address: formData.get('address'),
+          city: formData.get('city'),
+          pincode: formData.get('pincode'),
+          instructions: formData.get('instructions'),
+          items: JSON.parse(localStorage.getItem('cart') || '[]'),
+          total: document.querySelector('#order-summary .text-lg span:last-child') ? document.querySelector('#order-summary .text-lg span:last-child').textContent : ''
+        };
+        // Save order summary for confirmation page
+        localStorage.setItem('orderSummary', JSON.stringify(orderData));
+        // Clear cart
+        localStorage.setItem('cart', '[]');
+        // Redirect to confirmation page
+        window.location.href = 'checkout-success.html';
       };
-    });
-  }
-
-  document.getElementById("clear-cart").onclick = () => {
-    cart = [];
-    saveCart();
-    renderCartItems();
-  };
-
-  document.getElementById("checkout-form").onsubmit = e => {
-    e.preventDefault();
-
-    if (cart.length === 0) {
-      alert("Cart is empty");
-      return;
     }
-
-    const formData = new FormData(e.target);
-    const orderData = {
-      name: formData.get("name"),
-      address: formData.get("address"),
-      phone: formData.get("phone"),
-      items: cart.map(item => ({
-        name: item.productName || item.name,
-        shop: item.shopName || '',
-        qty: item.qty,
-        price: item.price
-      })),
-      total: cart.reduce((sum, item) => sum + item.price * item.qty, 0)
-    };
-
-    localStorage.setItem("orderSummary", JSON.stringify(orderData));
-    localStorage.removeItem("cart");
-
-    setTimeout(() => {
-      window.location.href = "checkout-success.html";
-    }, 200);
-  };
-
-  renderCartItems();
-</script>
-
-
+  });
+  </script>
 </body>
 </html>
