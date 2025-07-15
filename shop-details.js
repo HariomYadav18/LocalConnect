@@ -404,6 +404,9 @@ function renderShopDetails() {
       }
     });
   });
+
+  // Attach Add to Cart handlers after rendering cards
+  patchAddToCartButtons(shop);
 }
 
 // --- Product Quick View Modal ---
@@ -476,6 +479,8 @@ function openProductModal(shop, product) {
       toggleProductFavorite(shop, product, favBtn.querySelector('i'));
     };
   }
+  // Patch modal button
+  patchModalAddToCartButton(shop, product);
 }
 
 function isProductFavorite(shop, product) {
@@ -558,24 +563,24 @@ window.addToCart = function(product, shop, btn) {
   if (btn) animateAddToCartButton(btn);
 };
 
-// Patch product card and modal to use animated button
 function patchAddToCartButtons(shop) {
   // Card buttons
   document.querySelectorAll('.add-to-cart-btn').forEach((btn, idx) => {
     btn.onclick = (e) => {
       e.stopPropagation();
+      console.log("Add to Cart clicked", { product: shop.products[idx], shop, btn });
       window.addToCart(shop.products[idx], shop, btn);
     };
   });
 }
 
-// Patch modal button
 function patchModalAddToCartButton(shop, product) {
   const modal = document.getElementById('product-modal');
   if (!modal) return;
   const btn = modal.querySelector('.add-to-cart-btn-modal');
   if (btn) {
     btn.onclick = () => {
+      console.log("Add to Cart (modal) clicked", { product, shop, btn });
       window.addToCart(product, shop, btn);
       setTimeout(() => { document.getElementById('cart-popup-container').innerHTML = ''; }, 900);
     };
