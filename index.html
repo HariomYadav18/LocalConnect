@@ -305,9 +305,10 @@
         
         <!-- Enhanced Search Bar with Voice Search -->
         <div class="max-w-2xl mx-auto mb-8 animate-fadeIn" style="animation-delay: 0.6s">
+          <label for="hero-search" class="sr-only">Search for shops, products, or categories</label>
           <div class="relative group">
             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <i class="fas fa-search text-gray-400 group-hover:text-primary transition-colors duration-300"></i>
+              <i class="fas fa-search text-gray-400 group-hover:text-primary transition-colors duration-300" aria-hidden="true"></i>
             </div>
             <input 
               id="hero-search" 
@@ -319,8 +320,8 @@
               Search
             </button>
             <!-- Voice Search Button -->
-            <button class="absolute inset-y-0 right-20 px-3 text-gray-400 hover:text-primary transition-colors duration-300" title="Voice Search">
-              <i class="fas fa-microphone"></i>
+            <button class="absolute inset-y-0 right-20 px-3 text-gray-400 hover:text-primary transition-colors duration-300" title="Voice Search" aria-label="Voice Search">
+              <i class="fas fa-microphone" aria-hidden="true"></i>
             </button>
           </div>
         </div>
@@ -841,7 +842,9 @@
         Get the latest updates about this project and future developments
       </p>
       <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+        <label for="newsletter-email" class="sr-only">Email address</label>
         <input 
+          id="newsletter-email"
           type="email" 
           placeholder="Enter your email address" 
           class="flex-1 px-6 py-4 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-white/50 text-gray-900 placeholder-gray-500"
@@ -854,8 +857,8 @@
   </section>
 
   <!-- Floating Action Button -->
-  <button id="fab" title="Need help?" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full shadow-lg z-50 flex items-center justify-center transition-all duration-300 hover:scale-110">
-    <i class="fas fa-comments text-xl"></i>
+  <button id="fab" title="Need help?" aria-label="Need help?" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full shadow-lg z-50 flex items-center justify-center transition-all duration-300 hover:scale-110">
+    <i class="fas fa-comments text-xl" aria-hidden="true"></i>
   </button>
 
   <!-- Footer -->
