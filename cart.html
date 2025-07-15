@@ -116,6 +116,11 @@
     <div class="grid lg:grid-cols-3 gap-8">
       <!-- Cart Items -->
       <div class="lg:col-span-2">
+        <!-- Add Clear Cart button above cart items -->
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Cart Items</h2>
+          <button id="clear-cart-btn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl font-semibold transition-all duration-300">Clear Cart</button>
+        </div>
         <div id="cart-items-container">
           <!-- Cart items will be rendered here -->
         </div>
@@ -334,5 +339,16 @@
       // This function is now handled by cart.js
     });
   </script>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const clearBtn = document.getElementById('clear-cart-btn');
+  if (clearBtn) {
+    clearBtn.onclick = function() {
+      localStorage.setItem('cart', '[]');
+      if (typeof renderCartItems === 'function') renderCartItems();
+    };
+  }
+});
+</script>
 </body>
 </html>
