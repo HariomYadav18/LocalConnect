@@ -303,18 +303,6 @@
   <script src="shops.js" defer></script>
   <script src="cart.js" defer></script>
   <script>
-// Remove any cart items with shopId NaN (legacy fix)
-(function() {
-  let cart = [];
-  try { cart = JSON.parse(localStorage.getItem('cart')) || []; } catch {}
-  const filtered = cart.filter(item => item.shopId && !isNaN(item.shopId));
-  if (filtered.length !== cart.length) {
-    localStorage.setItem('cart', JSON.stringify(filtered));
-  }
-})();
-  </script>
-
-  <script>
     // Dark mode toggle
     function toggleDarkMode() {
       const isDark = document.documentElement.classList.toggle('dark');
@@ -350,12 +338,5 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
-<!-- Debug Panel for Cart Troubleshooting -->
-<div id="debug-panel" style="background:#f8f9fa;color:#222;padding:1em;margin-bottom:1em;border-radius:8px;font-size:0.95em;overflow-x:auto;max-width:100vw">
-  <strong>Cart Debug Info:</strong>
-  <pre id="debug-cart"></pre>
-  <strong>Shops Debug Info:</strong>
-  <pre id="debug-shops"></pre>
-</div>
 </body>
 </html>
