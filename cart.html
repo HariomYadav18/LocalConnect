@@ -364,30 +364,10 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const checkoutForm = document.getElementById('checkout-form');
+  var checkoutForm = document.getElementById('checkout-form');
   if (checkoutForm) {
     checkoutForm.onsubmit = function(e) {
       e.preventDefault();
-
-      // Gather form data
-      const formData = new FormData(checkoutForm);
-      const orderData = {
-        name: formData.get('name'),
-        phone: formData.get('phone'),
-        address: formData.get('address'),
-        city: formData.get('city'),
-        pincode: formData.get('pincode'),
-        instructions: formData.get('instructions'),
-        items: JSON.parse(localStorage.getItem('cart') || '[]'),
-        total: document.getElementById('total') ? document.getElementById('total').textContent : ''
-      };
-
-      // Save order summary for confirmation page
-      localStorage.setItem('orderSummary', JSON.stringify(orderData));
-      // Clear cart
-      localStorage.setItem('cart', '[]');
-
-      // Redirect to confirmation page
       window.location.href = 'checkout-success.html';
     };
   }
