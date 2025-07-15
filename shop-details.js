@@ -298,7 +298,10 @@ function renderShopDetails() {
     return;
   }
   if (!shopId || isNaN(shopId)) {
-    container.innerHTML = `<div class="text-center py-12"><div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-gray-400 text-3xl"></i></div><h3 class="text-xl font-semibold mb-2">Invalid shop link</h3><p class="text-gray-500 dark:text-gray-400">The shop link is missing or invalid. Please check the URL or return to the homepage.</p></div>`;
+    const container = document.getElementById('shop-container');
+    if (container) {
+      container.innerHTML = `<div class="text-center py-12"><div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-gray-400 text-3xl"></i></div><h3 class="text-xl font-semibold mb-2">Invalid shop link</h3><p class="text-gray-500 dark:text-gray-400">The shop link is missing or invalid. Please return to the <a href='index.html' class='text-primary underline'>homepage</a> and select a shop.</p></div>`;
+    }
     return;
   }
   if (shops.length === 0) {
