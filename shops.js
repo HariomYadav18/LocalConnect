@@ -84,3 +84,50 @@ const shops = [
     ]
   }
 ];
+
+function addToCart(product, shop) {
+  if (!product || !shop) {
+    console.error("addToCart: Missing product or shop!", { product, shop });
+    showNotification("Could not add product to cart. Please try again.", "error");
+    return;
+  }
+
+  let cart = [];
+  try {
+    cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (!Array.isArray(cart)) cart = [];
+  } catch (e) {
+    console.error("addToCart: Failed to parse cart from localStorage", e);
+    cart = [];
+  }
+
+  // Use a unique key (shopId + productName) for cart items
+  const existing = cart.find(item => item.productName === product.name && item.shopId === shop.id);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({
+      productName: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      qty: 1,
+      shopId: shop.id,
+      shopName: shop.name,
+      image: product.image
+    });
+  }
+
+  try {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  } catch (e) {
+    console.error("addToCart: Failed to save cart to localStorage", e);
+    showNotification("Could not save cart. Storage may be full or blocked.", "error");
+    return;
+  }
+
+  updateCartBadge(true);
+  showCartPopup(product, shop);
+  createConfettiBurst();
+  console.log("addToCart: Cart after adding:", cart);
+}
+window.addToCart = addToCart; // Ensure global access for all event handlers
