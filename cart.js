@@ -1,105 +1,125 @@
 // cart.js
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
+function getCart() {
+  try {
+    const cart = JSON.parse(localStorage.getItem('cart'));
+    return Array.isArray(cart) ? cart : [];
+  } catch {
+    return [];
+  }
 }
 
-// Import the unified product card renderer from shop-details.js if not already present
-// (Assume shop-details.js is loaded before cart.js, or move the function to a shared file if needed)
+function saveCart(cart) {
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function updateCartBadge() {
+  const cart = getCart();
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  const badge = document.getElementById('cart-badge');
+  if (badge) {
+    badge.textContent = totalItems;
+    badge.style.display = totalItems > 0 ? 'flex' : 'none';
+  }
+}
 
 function renderCartItems() {
-  const cartBody = document.getElementById("cart-body");
-  const totalPriceElem = document.getElementById("total-price");
-  cartBody.innerHTML = "";
+  const cart = getCart();
+  const cartBody = document.getElementById('cart-items-container');
+  const subtotalElem = document.getElementById('subtotal');
+  const totalElem = document.getElementById('total');
+  const deliveryFeeElem = document.getElementById('delivery-fee');
+  const taxesElem = document.getElementById('taxes');
+  const checkoutBtn = document.getElementById('checkout-btn');
 
-  let total = 0;
+  cartBody.innerHTML = '';
+  let subtotal = 0;
+  let hasValidItems = false;
+
+  if (!Array.isArray(window.shops)) {
+    cartBody.innerHTML = '<div class="text-center py-6 text-error">Shop data not loaded. Please refresh the page.</div>';
+    return;
+  }
 
   if (cart.length === 0) {
-    cartBody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-gray-500 dark:text-gray-400">Your cart is empty.</td></tr>`;
-    totalPriceElem.textContent = "Total: ₹0";
+    cartBody.innerHTML = `<div class="text-center py-6 text-gray-500 dark:text-gray-400">Your cart is empty.</div>`;
+    subtotalElem.textContent = '₹0';
+    totalElem.textContent = '₹0';
+    checkoutBtn.disabled = true;
     return;
   }
 
   cart.forEach((item, index) => {
-    const shop = shops.find(s => s.id === item.shopId);
-    const product = shop?.products?.[item.productIndex];
-
+    const shop = shops.find(s => String(s.id) === String(item.shopId));
+    const product = shop && Array.isArray(shop.products) && typeof item.productIndex === 'number' ? shop.products[item.productIndex] : null;
     if (product && shop) {
-      const subtotal = product.price * item.qty;
-      total += subtotal;
-
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td class="px-6 py-4 whitespace-nowrap">
-          ${renderProductCard(product, item.productIndex, shop, { showAddToCart: false })}
-          <div class="text-sm text-gray-500 dark:text-gray-400 mt-2">${shop.name}</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
-          <div class="flex items-center gap-2">
-            <button class="decrease bg-gray-200 px-2 py-1 rounded hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600" data-index="${index}">−</button>
-            <span>${item.qty}</span>
-            <button class="increase bg-gray-200 px-2 py-1 rounded hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600" data-index="${index}">+</button>
+      hasValidItems = true;
+      const itemSubtotal = product.price * item.qty;
+      subtotal += itemSubtotal;
+      const div = document.createElement('div');
+      div.className = 'flex items-center justify-between border-b border-gray-200 dark:border-darkBorder py-4';
+      div.innerHTML = `
+        <div class="flex items-center space-x-4">
+          <img src="${product.image}" alt="${product.name}" class="w-16 h-16 object-cover rounded-xl shadow-md">
+          <div>
+            <div class="font-semibold text-lg text-gray-900 dark:text-white">${product.name}</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">${shop.name}</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">Qty: <span class="font-bold">${item.qty}</span></div>
           </div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">₹${subtotal}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm">
-          <button class="remove text-red-600 hover:text-red-800 font-semibold" data-index="${index}">Remove</button>
-        </td>
+        </div>
+        <div class="flex flex-col items-end">
+          <div class="font-semibold text-primary dark:text-accent text-lg">₹${product.price}</div>
+          <div class="text-sm text-gray-500 dark:text-gray-400 line-through">${product.originalPrice > product.price ? `₹${product.originalPrice}` : ''}</div>
+          <button class="remove text-red-600 hover:text-red-800 font-semibold mt-2 text-xs" data-index="${index}">Remove</button>
+        </div>
       `;
-      cartBody.appendChild(row);
+      cartBody.appendChild(div);
     } else {
-      // Handle missing product/shop gracefully
-      const row = document.createElement("tr");
-      row.innerHTML = `<td colspan="4" class="text-center text-error">Product or shop not found (may have been removed).</td>`;
-      cartBody.appendChild(row);
+      const div = document.createElement('div');
+      div.className = 'text-center text-error py-2';
+      div.textContent = 'Product or shop not found (may have been removed).';
+      cartBody.appendChild(div);
     }
   });
 
-  totalPriceElem.textContent = `Total: ₹${total}`;
+  subtotalElem.textContent = `₹${subtotal}`;
+  const deliveryFee = 20;
+  const taxes = 0;
+  const total = subtotal + deliveryFee + taxes;
+  deliveryFeeElem.textContent = `₹${deliveryFee}`;
+  taxesElem.textContent = `₹${taxes}`;
+  totalElem.textContent = `₹${total}`;
+  checkoutBtn.disabled = !hasValidItems;
 
   attachEventListeners();
+  updateCartBadge();
 }
 
 function attachEventListeners() {
-  // Increase Quantity
-  document.querySelectorAll(".increase").forEach(btn =>
-    btn.addEventListener("click", e => {
-      const index = +e.target.dataset.index;
-      cart[index].qty++;
-      saveCart();
-      renderCartItems();
-    })
-  );
-
-  // Decrease Quantity
-  document.querySelectorAll(".decrease").forEach(btn =>
-    btn.addEventListener("click", e => {
-      const index = +e.target.dataset.index;
-      if (cart[index].qty > 1) {
-        cart[index].qty--;
-      } else {
-        cart.splice(index, 1);
-      }
-      saveCart();
-      renderCartItems();
-    })
-  );
-
-  // Remove Item
-  document.querySelectorAll(".remove").forEach(btn =>
-    btn.addEventListener("click", e => {
+  document.querySelectorAll('.remove').forEach(btn =>
+    btn.addEventListener('click', e => {
+      const cart = getCart();
       const index = +e.target.dataset.index;
       cart.splice(index, 1);
-      saveCart();
+      saveCart(cart);
       renderCartItems();
     })
   );
 }
 
-function clearCart() {
-  cart = [];
-  saveCart();
+// Wait for shops to be loaded before rendering cart
+function waitForShopsAndRender(tries = 0) {
+  if (typeof window.shops === 'undefined' || !Array.isArray(window.shops)) {
+    if (tries > 30) {
+      document.getElementById('cart-items-container').innerHTML = '<div class="text-center py-6 text-error">Shop data could not be loaded. Please refresh.</div>';
+      return;
+    }
+    setTimeout(() => waitForShopsAndRender(tries + 1), 50);
+    return;
+  }
   renderCartItems();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  waitForShopsAndRender();
+});
