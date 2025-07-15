@@ -126,7 +126,22 @@ function showCartPopup(product, shop) {
 }
 
 function addToCart(product, shop) {
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  if (!product || !shop) {
+    console.error("addToCart: Missing product or shop!", { product, shop });
+    showNotification("Could not add product to cart. Please try again.", "error");
+    return;
+  }
+
+  let cart = [];
+  try {
+    cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (!Array.isArray(cart)) cart = [];
+  } catch (e) {
+    console.error("addToCart: Failed to parse cart from localStorage", e);
+    cart = [];
+  }
+
+  // Use a unique key (shopId + productName) for cart items
   const existing = cart.find(item => item.productName === product.name && item.shopId === shop.id);
   if (existing) {
     existing.qty += 1;
@@ -141,11 +156,21 @@ function addToCart(product, shop) {
       image: product.image
     });
   }
-  localStorage.setItem('cart', JSON.stringify(cart));
+
+  try {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  } catch (e) {
+    console.error("addToCart: Failed to save cart to localStorage", e);
+    showNotification("Could not save cart. Storage may be full or blocked.", "error");
+    return;
+  }
+
   updateCartBadge(true);
   showCartPopup(product, shop);
   createConfettiBurst();
+  console.log("addToCart: Cart after adding:", cart);
 }
+window.addToCart = addToCart;
 
 // Fix: Ensure dark mode toggle and theme always work
 function toggleDarkMode() {
