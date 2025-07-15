@@ -125,7 +125,7 @@ function showCartPopup(product, shop) {
   setTimeout(() => { container.innerHTML = ''; }, 2500);
 }
 
-function addToCart(product, shop) {
+function addToCart(product, shop, btn, productIndex) {
   if (!product || !shop) {
     console.error("addToCart: Missing product or shop!", { product, shop });
     showNotification("Could not add product to cart. Please try again.", "error");
@@ -153,7 +153,8 @@ function addToCart(product, shop) {
       qty: 1,
       shopId: shop.id,
       shopName: shop.name,
-      image: product.image
+      image: product.image,
+      productIndex: typeof productIndex === 'number' ? productIndex : shop.products.findIndex(p => p.name === product.name)
     });
   }
 
@@ -470,7 +471,8 @@ function openProductModal(shop, product) {
   // Add to Cart in modal
   const addBtn = modal.querySelector('.add-to-cart-btn-modal');
   if (addBtn) {
-    addBtn.onclick = () => { addToCart(product, shop); container.innerHTML = ''; };
+    const idx = shop.products.findIndex(p => p.name === product.name);
+    addBtn.onclick = () => { addToCart(product, shop, addBtn, idx); container.innerHTML = ''; };
   }
   // Favorite in modal
   const favBtn = modal.querySelector('.favorite-btn-modal');
@@ -558,8 +560,8 @@ function animateAddToCartButton(btn) {
 
 // Patch addToCart to animate button
 const _originalAddToCart = addToCart;
-window.addToCart = function(product, shop, btn) {
-  _originalAddToCart(product, shop);
+window.addToCart = function(product, shop, btn, productIndex) {
+  _originalAddToCart(product, shop, btn, productIndex);
   if (btn) animateAddToCartButton(btn);
 };
 
@@ -568,8 +570,8 @@ function patchAddToCartButtons(shop) {
   document.querySelectorAll('.add-to-cart-btn').forEach((btn, idx) => {
     btn.onclick = (e) => {
       e.stopPropagation();
-      console.log("Add to Cart clicked", { product: shop.products[idx], shop, btn });
-      window.addToCart(shop.products[idx], shop, btn);
+      console.log("Add to Cart clicked", { product: shop.products[idx], shop, btn, idx });
+      window.addToCart(shop.products[idx], shop, btn, idx);
     };
   });
 }
@@ -579,9 +581,10 @@ function patchModalAddToCartButton(shop, product) {
   if (!modal) return;
   const btn = modal.querySelector('.add-to-cart-btn-modal');
   if (btn) {
+    const idx = shop.products.findIndex(p => p.name === product.name);
     btn.onclick = () => {
-      console.log("Add to Cart (modal) clicked", { product, shop, btn });
-      window.addToCart(product, shop, btn);
+      console.log("Add to Cart (modal) clicked", { product, shop, btn, idx });
+      window.addToCart(product, shop, btn, idx);
       setTimeout(() => { document.getElementById('cart-popup-container').innerHTML = ''; }, 900);
     };
   }
