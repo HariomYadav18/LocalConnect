@@ -1,5 +1,6 @@
-// cart.js
+// cart.js (rewritten from scratch)
 
+// Utility: Get cart from localStorage
 function getCart() {
   try {
     const cart = JSON.parse(localStorage.getItem('cart'));
@@ -9,13 +10,15 @@ function getCart() {
   }
 }
 
+// Utility: Save cart to localStorage
 function saveCart(cart) {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+// Utility: Update cart badge
 function updateCartBadge() {
   const cart = getCart();
-  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  const totalItems = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
   const badge = document.getElementById('cart-badge');
   if (badge) {
     badge.textContent = totalItems;
@@ -23,6 +26,7 @@ function updateCartBadge() {
   }
 }
 
+// Render cart items
 function renderCartItems() {
   const cart = getCart();
   const cartBody = document.getElementById('cart-items-container');
@@ -36,25 +40,26 @@ function renderCartItems() {
   let subtotal = 0;
   let hasValidItems = false;
 
-  if (!Array.isArray(window.shops)) {
+  if (!window.shops || !Array.isArray(window.shops)) {
     cartBody.innerHTML = '<div class="text-center py-6 text-error">Shop data not loaded. Please refresh the page.</div>';
     return;
   }
 
   if (cart.length === 0) {
     cartBody.innerHTML = `<div class="text-center py-6 text-gray-500 dark:text-gray-400">Your cart is empty.</div>`;
-    subtotalElem.textContent = '₹0';
-    totalElem.textContent = '₹0';
-    checkoutBtn.disabled = true;
+    if (subtotalElem) subtotalElem.textContent = '₹0';
+    if (totalElem) totalElem.textContent = '₹0';
+    if (checkoutBtn) checkoutBtn.disabled = true;
     return;
   }
 
   cart.forEach((item, index) => {
-    const shop = shops.find(s => String(s.id) === String(item.shopId));
-    const product = shop && Array.isArray(shop.products) && typeof item.productIndex === 'number' ? shop.products[item.productIndex] : null;
+    // Robust matching: allow string/number for shopId, and check productIndex
+    const shop = window.shops.find(s => String(s.id) === String(item.shopId) || Number(s.id) === Number(item.shopId));
+    const product = shop && Array.isArray(shop.products) && item.productIndex != null && shop.products[item.productIndex] ? shop.products[item.productIndex] : null;
     if (product && shop) {
       hasValidItems = true;
-      const itemSubtotal = product.price * item.qty;
+      const itemSubtotal = (product.price || 0) * (item.qty || 1);
       subtotal += itemSubtotal;
       const div = document.createElement('div');
       div.className = 'flex items-center justify-between border-b border-gray-200 dark:border-darkBorder py-4';
@@ -82,20 +87,20 @@ function renderCartItems() {
     }
   });
 
-  subtotalElem.textContent = `₹${subtotal}`;
+  if (subtotalElem) subtotalElem.textContent = `₹${subtotal}`;
   const deliveryFee = 20;
   const taxes = 0;
   const total = subtotal + deliveryFee + taxes;
-  deliveryFeeElem.textContent = `₹${deliveryFee}`;
-  taxesElem.textContent = `₹${taxes}`;
-  totalElem.textContent = `₹${total}`;
-  checkoutBtn.disabled = !hasValidItems;
+  if (deliveryFeeElem) deliveryFeeElem.textContent = `₹${deliveryFee}`;
+  if (taxesElem) taxesElem.textContent = `₹${taxes}`;
+  if (totalElem) totalElem.textContent = `₹${total}`;
+  if (checkoutBtn) checkoutBtn.disabled = !hasValidItems;
 
-  attachEventListeners();
+  attachCartEventListeners();
   updateCartBadge();
 }
 
-function attachEventListeners() {
+function attachCartEventListeners() {
   document.querySelectorAll('.remove').forEach(btn =>
     btn.addEventListener('click', e => {
       const cart = getCart();
@@ -105,11 +110,19 @@ function attachEventListeners() {
       renderCartItems();
     })
   );
+  // Clear cart button
+  const clearBtn = document.getElementById('clear-cart-btn');
+  if (clearBtn) {
+    clearBtn.onclick = function() {
+      saveCart([]);
+      renderCartItems();
+    };
+  }
 }
 
 // Wait for shops to be loaded before rendering cart
 function waitForShopsAndRender(tries = 0) {
-  if (typeof window.shops === 'undefined' || !Array.isArray(window.shops)) {
+  if (!window.shops || !Array.isArray(window.shops)) {
     if (tries > 30) {
       document.getElementById('cart-items-container').innerHTML = '<div class="text-center py-6 text-error">Shop data could not be loaded. Please refresh.</div>';
       return;
