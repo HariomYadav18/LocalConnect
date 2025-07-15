@@ -94,7 +94,18 @@ function renderCartItems() {
   if (deliveryFeeElem) deliveryFeeElem.textContent = `₹${deliveryFee}`;
   if (taxesElem) taxesElem.textContent = `₹${taxes}`;
   if (totalElem) totalElem.textContent = `₹${total}`;
-  if (checkoutBtn) checkoutBtn.disabled = !hasValidItems;
+  if (checkoutBtn) {
+    checkoutBtn.disabled = !hasValidItems;
+    checkoutBtn.onclick = function(e) {
+      if (!hasValidItems) {
+        // Show toast or alert
+        showToast('Your cart is empty or contains invalid items.');
+        e.preventDefault();
+        return false;
+      }
+      window.location.href = 'checkout.html';
+    };
+  }
 
   attachCartEventListeners();
   updateCartBadge();
@@ -136,3 +147,17 @@ function waitForShopsAndRender(tries = 0) {
 document.addEventListener('DOMContentLoaded', () => {
   waitForShopsAndRender();
 });
+
+// Toast function
+function showToast(msg) {
+  let toast = document.getElementById('cart-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'cart-toast';
+    toast.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-error text-white px-6 py-3 rounded-xl shadow-lg z-50 text-lg animate-bounceIn';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  setTimeout(() => { toast.style.display = 'none'; }, 2200);
+}
