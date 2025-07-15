@@ -180,58 +180,9 @@
 
   <!-- Ensure all scripts use defer and correct order -->
   <script src="shops.js" defer></script>
+  <script src="utils.js" defer></script>
+  <script src="navbar.js" defer></script>
+  <script src="theme.js" defer></script>
   <script src="cart.js" defer></script>
-  <script>
-    // Dark mode toggle
-    function toggleDarkMode() {
-      const isDark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('localconnect_theme', isDark ? 'dark' : 'light');
-      
-      const themeIcon = document.getElementById('theme-icon');
-      themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-700';
-    }
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-      // Initialize theme
-      if (localStorage.getItem('localconnect_theme') === 'dark') {
-        document.documentElement.classList.add('dark');
-        document.getElementById('theme-icon').className = 'fas fa-sun text-gray-300';
-      }
-
-      // Update cart badge
-      // This function is now handled by cart.js
-
-      // Render cart items
-      // This function is now handled by cart.js
-    });
-  </script>
-  <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const clearBtn = document.getElementById('clear-cart-btn');
-  if (clearBtn) {
-    clearBtn.onclick = function() {
-      localStorage.setItem('cart', '[]');
-      if (typeof renderCartItems === 'function') renderCartItems();
-    };
-  }
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Remove checkout modal and related scripts
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var checkoutForm = document.getElementById('checkout-form');
-  if (checkoutForm) {
-    checkoutForm.onsubmit = function(e) {
-      e.preventDefault();
-      window.location.href = 'checkout-success.html';
-    };
-  }
-});
-</script>
 </body>
 </html>

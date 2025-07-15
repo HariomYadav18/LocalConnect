@@ -517,6 +517,54 @@ document.getElementById('hero-search').addEventListener('keypress', function(e) 
   }
 });
 
+// index.js
+// Hero search functionality
+const heroSearch = document.getElementById('hero-search');
+if (heroSearch) {
+  heroSearch.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      document.getElementById('searchInput').value = this.value;
+      document.getElementById('searchInput').dispatchEvent(new Event('input'));
+      document.getElementById('shops').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+}
+// Counter animation
+function animateCounters() {
+  const counters = document.querySelectorAll('.counter');
+  const speed = 200;
+  counters.forEach(counter => {
+    const target = +counter.getAttribute('data-target');
+    const count = +counter.textContent;
+    const increment = target / speed;
+    if (count < target) {
+      const updateCount = () => {
+        const currentCount = +counter.textContent;
+        if (currentCount < target) {
+          counter.textContent = Math.ceil(currentCount + increment);
+          setTimeout(updateCount, 1);
+        } else {
+          counter.textContent = target;
+        }
+      };
+      updateCount();
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', animateCounters);
+// PWA Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('SW registered: ', registration);
+      })
+      .catch((registrationError) => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
+
 // Export functions for global access
 window.LocalConnect = {
   filterShops,

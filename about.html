@@ -408,36 +408,9 @@
     </div>
   </footer>
 
-  <script>
-    // Dark mode toggle
-    function toggleDarkMode() {
-      const isDark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('localconnect_theme', isDark ? 'dark' : 'light');
-      
-      const themeIcon = document.getElementById('theme-icon');
-      themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-700';
-    }
-
-    // Update cart badge
-    function updateCartBadge() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-      const badge = document.getElementById('cart-badge');
-      badge.textContent = totalItems;
-      badge.style.display = totalItems > 0 ? 'flex' : 'none';
-    }
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-      // Initialize theme
-      if (localStorage.getItem('localconnect_theme') === 'dark') {
-        document.documentElement.classList.add('dark');
-        document.getElementById('theme-icon').className = 'fas fa-sun text-gray-300';
-      }
-
-      // Update cart badge
-      updateCartBadge();
-    });
-  </script>
+  <script src="shops.js" defer></script>
+  <script src="utils.js" defer></script>
+  <script src="navbar.js" defer></script>
+  <script src="theme.js" defer></script>
 </body>
 </html>

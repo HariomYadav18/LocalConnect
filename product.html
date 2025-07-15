@@ -44,69 +44,9 @@
   <div id="loading" class="text-center py-12 text-gray-400 dark:text-gray-500 animate-pulse">Loading product details...</div>
 
   <script src="shops.js" defer></script>
-  <script src="shop-details.js" defer></script>
-  <script>
-    // Dark Mode Toggle
-    function toggleDarkMode() {
-      document.documentElement.classList.toggle("dark");
-      localStorage.setItem("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
-    }
-
-    // Auto apply saved dark mode
-    if (localStorage.getItem("theme") === "dark") {
-      document.documentElement.classList.add("dark");
-    }
-
-    // Get shopId and productIndex from URL
-    const params = new URLSearchParams(window.location.search);
-    const shopId = parseInt(params.get("shopId"));
-    const productIndex = parseInt(params.get("productIndex"));
-
-    const shop = shops.find(s => s.id === shopId);
-    const product = shop?.products?.[productIndex];
-
-    if (shop && product) {
-      // Use the unified product card renderer for details
-      const detailContainer = document.getElementById('productDetail');
-      detailContainer.innerHTML = renderProductCard(product, productIndex, shop, { showAddToCart: true });
-      detailContainer.classList.remove("hidden");
-      document.getElementById('loading').style.display = "none";
-
-      // Add to Cart Handler (with Quantity Merge)
-      detailContainer.querySelector(".add-to-cart-btn").addEventListener("click", () => {
-        const qty = 1;
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-        const shopIdNum = Number(shopId);
-        const productIndexNum = Number(productIndex);
-        const existingItem = cart.find(item => Number(item.shopId) === shopIdNum && Number(item.productIndex) === productIndexNum);
-        if (existingItem) {
-          existingItem.qty += qty;
-        } else {
-          cart.push({
-            shopId: shopIdNum,
-            productIndex: productIndexNum,
-            qty,
-            productName: product.name,
-            price: Number(product.price),
-            shopName: shop.name,
-            image: product.image
-          });
-        }
-        localStorage.setItem("cart", JSON.stringify(cart));
-        alert("Added to cart!");
-      });
-      // Back to shop link
-      const backLink = document.getElementById("backToShop");
-      if (backLink) {
-        backLink.href = `shop-details.html?shopId=${shopId}`;
-        backLink.textContent = `← Back to ${shop.name}`;
-      }
-    } else {
-      document.getElementById("loading").innerHTML = `
-        <p class="text-center text-gray-500 dark:text-gray-300">Product not found.
-          <a href="index.html" class="text-blue-600 underline">Go back</a>.
-        </p>`;
-    }
-  </script>
+  <script src="utils.js" defer></script>
+  <script src="navbar.js" defer></script>
+  <script src="theme.js" defer></script>
+  <script src="product.js" defer></script>
 </body>
 </html>
