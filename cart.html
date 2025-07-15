@@ -338,5 +338,29 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const checkoutBtn = document.getElementById('checkout-btn');
+  const checkoutModal = document.getElementById('checkout-modal');
+  const closeModal = document.getElementById('close-modal');
+  const cancelCheckout = document.getElementById('cancel-checkout');
+
+  if (checkoutBtn && checkoutModal) {
+    checkoutBtn.onclick = function() {
+      checkoutModal.classList.remove('hidden');
+    };
+  }
+  if (closeModal && checkoutModal) {
+    closeModal.onclick = function() {
+      checkoutModal.classList.add('hidden');
+    };
+  }
+  if (cancelCheckout && checkoutModal) {
+    cancelCheckout.onclick = function() {
+      checkoutModal.classList.add('hidden');
+    };
+  }
+});
+</script>
 </body>
 </html>
