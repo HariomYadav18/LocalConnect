@@ -126,7 +126,7 @@ function showCartPopup(product, shop) {
 }
 
 function addToCart(product, shop, btn, productIndex) {
-  if (!product || !shop) {
+  if (!product || !shop || !shop.id) {
     console.error("addToCart: Missing product or shop!", { product, shop });
     showNotification("Could not add product to cart. Please try again.", "error");
     return;
@@ -137,12 +137,11 @@ function addToCart(product, shop, btn, productIndex) {
     cart = JSON.parse(localStorage.getItem('cart')) || [];
     if (!Array.isArray(cart)) cart = [];
   } catch (e) {
-    console.error("addToCart: Failed to parse cart from localStorage", e);
     cart = [];
   }
 
   // Use a unique key (shopId + productName) for cart items
-  const existing = cart.find(item => item.productName === product.name && item.shopId === shop.id);
+  const existing = cart.find(item => item.productName === product.name && String(item.shopId) === String(shop.id));
   if (existing) {
     existing.qty += 1;
   } else {
@@ -161,7 +160,6 @@ function addToCart(product, shop, btn, productIndex) {
   try {
     localStorage.setItem('cart', JSON.stringify(cart));
   } catch (e) {
-    console.error("addToCart: Failed to save cart to localStorage", e);
     showNotification("Could not save cart. Storage may be full or blocked.", "error");
     return;
   }
