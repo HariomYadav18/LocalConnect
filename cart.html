@@ -284,8 +284,18 @@
 
   <!-- Ensure all scripts use defer and correct order -->
   <script src="shops.js" defer></script>
-  <script src="shop-details.js" defer></script>
   <script src="cart.js" defer></script>
+  <script>
+// Remove any cart items with shopId NaN (legacy fix)
+(function() {
+  let cart = [];
+  try { cart = JSON.parse(localStorage.getItem('cart')) || []; } catch {}
+  const filtered = cart.filter(item => item.shopId && !isNaN(item.shopId));
+  if (filtered.length !== cart.length) {
+    localStorage.setItem('cart', JSON.stringify(filtered));
+  }
+})();
+  </script>
 
   <script>
     // Dark mode toggle
