@@ -341,72 +341,33 @@
   </button>
 
   <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-12">
+  <footer class="footer-glass text-white py-12 mt-20 relative overflow-hidden">
+    <!-- Animated Particles -->
+    <span class="footer-particle" style="left:10%;bottom:18px;width:18px;height:18px;background:#FF6B35;animation-delay:0s"></span>
+    <span class="footer-particle" style="left:40%;bottom:32px;width:12px;height:12px;background:#FFD23F;animation-delay:1.2s"></span>
+    <span class="footer-particle" style="left:70%;bottom:24px;width:16px;height:16px;background:#F7931E;animation-delay:2.1s"></span>
+    <span class="footer-particle" style="left:85%;bottom:12px;width:10px;height:10px;background:#2ECC71;animation-delay:2.8s"></span>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid md:grid-cols-4 gap-8">
-        <div>
-          <div class="flex items-center space-x-3 mb-4">
-            <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
-              <i class="fas fa-store text-white text-lg" aria-hidden="true"></i>
-            </div>
-            <h3 class="text-2xl font-display font-bold">LocalConnect</h3>
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-8">
+        <div class="flex items-center space-x-3 mb-4 md:mb-0">
+          <div class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-store text-white text-2xl"></i>
           </div>
-          <p class="text-gray-400 mb-4">
-            A final year project by Hariom Yadav (VIT Bhopal University) exploring local business connectivity through innovative technology.
-          </p>
-          <div class="flex space-x-4">
-            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
-              <i class="fab fa-github text-xl" aria-hidden="true"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/hariomyadav18/" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors duration-200">
-              <i class="fab fa-linkedin text-xl" aria-hidden="true"></i>
-            </a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
-              <i class="fas fa-envelope text-xl" aria-hidden="true"></i>
-            </a>
-          </div>
+          <span class="text-3xl font-display font-bold footer-gradient">LocalConnect</span>
         </div>
-
-        <div>
-          <h4 class="font-semibold mb-4">Project Links</h4>
-          <ul class="space-y-2 text-gray-400">
-            <li><a href="#" class="hover:text-white transition-colors duration-200">Documentation</a></li>
-            <li><a href="#" class="hover:text-white transition-colors duration-200">GitHub Repository</a></li>
-            <li><a href="#" class="hover:text-white transition-colors duration-200">Project Report</a></li>
-            <li><a href="#" class="hover:text-white transition-colors duration-200">Demo Video</a></li>
-          </ul>
+        <div class="flex space-x-6">
+          <a href="https://github.com/hariomyadav18" target="_blank" rel="noopener" class="footer-social text-gray-300 hover:text-accent" aria-label="GitHub"><i class="fab fa-github text-2xl"></i></a>
+          <a href="https://www.linkedin.com/in/hariomyadav18/" target="_blank" rel="noopener" class="footer-social text-gray-300 hover:text-accent" aria-label="LinkedIn"><i class="fab fa-linkedin text-2xl"></i></a>
+          <a href="mailto:hariomydv1844@gmail.com" class="footer-social text-gray-300 hover:text-accent" aria-label="Email"><i class="fas fa-envelope text-2xl"></i></a>
         </div>
-
-        <div>
-          <h4 class="font-semibold mb-4">Support</h4>
-          <ul class="space-y-2 text-gray-400">
-            <li><a href="#" class="hover:text-white transition-colors duration-200">Help Center</a></li>
-            <li><a href="#" class="hover:text-white transition-colors duration-200">Privacy Policy</a></li>
-            <li><a href="#" class="hover:text-white transition-colors duration-200">Terms of Service</a></li>
-            <li><a href="mailto:hariomydv1844@gmail.com" class="hover:text-white transition-colors duration-200">Contact Developer</a></li>
-          </ul>
+        <div class="text-sm text-gray-300 text-center md:text-right">
+          <div>&copy; 2025 <span class="footer-gradient font-bold">LocalConnect</span></div>
+          <div>Made with <span class="animate-pulse text-error">&#10084;&#65039;</span> by Hariom Yadav, VIT Bhopal University</div>
         </div>
-
-        <div>
-          <h4 class="font-semibold mb-4">Download Project</h4>
-          <div class="space-y-3">
-            <button class="w-full bg-black text-white py-3 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 flex items-center justify-center space-x-2">
-              <i class="fab fa-github text-xl" aria-hidden="true"></i>
-              <span>Source Code</span>
-            </button>
-            <button class="w-full bg-black text-white py-3 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 flex items-center justify-center space-x-2">
-              <i class="fas fa-file-pdf text-xl" aria-hidden="true"></i>
-              <span>Project Report</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-        <p>&copy; 2025 LocalConnect - Final Year Project. Made with ❤️ by Hariom Yadav, VIT Bhopal University.</p>
       </div>
     </div>
   </footer>
+  <!-- End Modern Footer -->
 
   <script src="shops.js" defer></script>
   <script src="utils.js" defer></script>

@@ -108,3 +108,45 @@ button:hover {
   outline-offset: 2px;
   border-radius: 0.375rem;
 }
+
+/* Modern Glassy Footer Styles */
+.footer-glass {
+  background: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-top: 1.5px solid rgba(255,255,255,0.08);
+  box-shadow: 0 -4px 32px 0 rgba(0,0,0,0.12);
+  position: relative;
+  z-index: 10;
+}
+.footer-gradient {
+  background: linear-gradient(90deg, #FF6B35 0%, #F7931E 50%, #FFD23F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  animation: gradientShift 4s ease-in-out infinite;
+}
+.footer-social {
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 0 rgba(255,107,53,0.0);
+}
+.footer-social:hover {
+  transform: translateY(-4px) scale(1.15) rotate(-6deg);
+  box-shadow: 0 0 16px 2px #FF6B35, 0 0 32px 4px #FFD23F44;
+  color: #FFD23F !important;
+}
+.footer-particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.18;
+  pointer-events: none;
+  animation: footerParticle 8s linear infinite;
+}
+@keyframes footerParticle {
+  0% { transform: translateY(0) scale(1); opacity: 0.18; }
+  50% { transform: translateY(-24px) scale(1.2); opacity: 0.32; }
+  100% { transform: translateY(0) scale(1); opacity: 0.18; }
+}
+@media (max-width: 640px) {
+  .footer-glass { padding: 2rem 1rem; }
+}
