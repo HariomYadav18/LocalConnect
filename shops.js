@@ -84,5 +84,6 @@ const shops = [
     ]
   }
 ];
+window.shops = shops;
 
 console.log(window.shops)
