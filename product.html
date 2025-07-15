@@ -74,15 +74,22 @@
 
       // Add to Cart Handler (with Quantity Merge)
       detailContainer.querySelector(".add-to-cart-btn").addEventListener("click", () => {
-        const qty = 1; // For now, single quantity; can add input if needed
+        const qty = 1;
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
-        const existingItem = cart.find(item =>
-          item.shopId === shopId && item.productIndex === productIndex
-        );
+        const shopIdNum = Number(shopId);
+        const productIndexNum = Number(productIndex);
+        const existingItem = cart.find(item => Number(item.shopId) === shopIdNum && Number(item.productIndex) === productIndexNum);
         if (existingItem) {
           existingItem.qty += qty;
         } else {
-          cart.push({ shopId, productIndex, qty });
+          cart.push({
+            shopId: shopIdNum,
+            productIndex: productIndexNum,
+            qty,
+            productName: product.name,
+            price: Number(product.price),
+            shopName: shop.name
+          });
         }
         localStorage.setItem("cart", JSON.stringify(cart));
         alert("Added to cart!");

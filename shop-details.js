@@ -126,8 +126,8 @@ function showCartPopup(product, shop) {
 }
 
 function addToCart(product, shop, btn, productIndex) {
-  if (!product || !shop || !shop.id) {
-    console.error("addToCart: Missing product or shop!", { product, shop });
+  if (!product || !shop || typeof shop.id === 'undefined' || typeof productIndex === 'undefined') {
+    console.error("addToCart: Missing product or shop!", { product, shop, productIndex });
     showNotification("Could not add product to cart. Please try again.", "error");
     return;
   }
@@ -140,34 +140,24 @@ function addToCart(product, shop, btn, productIndex) {
     cart = [];
   }
 
-  // Use a unique key (shopId + productName) for cart items
-  const existing = cart.find(item => item.productName === product.name && String(item.shopId) === String(shop.id));
+  const shopId = Number(shop.id);
+  const qty = 1;
+  const existing = cart.find(item => Number(item.shopId) === shopId && Number(item.productIndex) === Number(productIndex));
   if (existing) {
-    existing.qty += 1;
+    existing.qty += qty;
   } else {
     cart.push({
+      shopId,
+      productIndex: Number(productIndex),
+      qty,
       productName: product.name,
-      price: product.price,
-      originalPrice: product.originalPrice,
-      qty: 1,
-      shopId: shop.id,
-      shopName: shop.name,
-      image: product.image,
-      productIndex: typeof productIndex === 'number' ? productIndex : shop.products.findIndex(p => p.name === product.name)
+      price: Number(product.price),
+      shopName: shop.name
     });
   }
-
-  try {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  } catch (e) {
-    showNotification("Could not save cart. Storage may be full or blocked.", "error");
-    return;
-  }
-
-  updateCartBadge(true);
-  showCartPopup(product, shop);
-  createConfettiBurst();
-  console.log("addToCart: Cart after adding:", cart);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartBadge();
+  showNotification("Added to cart!", "success");
 }
 window.addToCart = addToCart;
 
