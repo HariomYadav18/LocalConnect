@@ -154,8 +154,9 @@
             </div>
           </div>
 
-          <!-- Change button to link -->
-          <a href="checkout.html" id="checkout-btn" class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
+          <!-- Pure link, no JS, no disabled -->
+          <a href="checkout.html" id="checkout-btn"
+             class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2">
             <i class="fas fa-credit-card"></i>
             <span>Proceed to Checkout</span>
           </a>
@@ -218,7 +219,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const checkoutBtn = document.getElementById('checkout-btn');
   // Remove checkout modal and related scripts
 });
 </script>
