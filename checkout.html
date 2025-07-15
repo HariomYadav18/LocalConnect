@@ -35,6 +35,10 @@
             <span>Cart</span>
           </a>
         </div>
+        <!-- Dark Mode Toggle -->
+        <button id="dark-mode-toggle" aria-label="Toggle dark mode" onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-100 dark:bg-darkBorder hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 ml-4">
+          <i id="theme-icon" class="fas fa-moon text-gray-700 dark:text-gray-300"></i>
+        </button>
       </div>
     </div>
   </nav>
@@ -43,8 +47,8 @@
     <div class="grid md:grid-cols-2 gap-10">
       <!-- Order Summary -->
       <div>
-        <h2 class="text-2xl font-bold mb-6 text-primary dark:text-accent">Order Summary</h2>
-        <div id="order-summary" class="bg-white dark:bg-darkCard rounded-2xl shadow-lg p-6 mb-6">
+        <h2 class="text-2xl font-bold mb-6 text-primary dark:text-accent font-display">Order Summary</h2>
+        <div id="order-summary" class="bg-white dark:bg-darkCard rounded-2xl shadow-lg p-6 mb-6 border border-gray-100 dark:border-darkBorder">
           <!-- Order summary will be rendered here -->
         </div>
         <a href="cart.html" class="text-primary dark:text-accent hover:underline text-sm font-medium">
@@ -53,8 +57,8 @@
       </div>
       <!-- Checkout Form -->
       <div>
-        <h2 class="text-2xl font-bold mb-6 text-primary dark:text-accent">Delivery Details</h2>
-        <form id="checkout-form" class="bg-white dark:bg-darkCard rounded-2xl shadow-lg p-6 space-y-6">
+        <h2 class="text-2xl font-bold mb-6 text-primary dark:text-accent font-display">Delivery Details</h2>
+        <form id="checkout-form" class="bg-white dark:bg-darkCard rounded-2xl shadow-lg p-6 space-y-6 border border-gray-100 dark:border-darkBorder">
           <div>
             <label for="checkout-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
             <input id="checkout-name" name="name" type="text" autocomplete="name" required class="w-full px-4 py-3 border-2 border-gray-200 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard text-gray-900 dark:text-white focus:border-primary dark:focus:border-accent focus:outline-none transition-all duration-300" />
@@ -91,6 +95,23 @@
   </main>
 
   <script src="shops.js" defer></script>
+  <script>
+  // Dark mode toggle
+  function toggleDarkMode() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('localconnect_theme', isDark ? 'dark' : 'light');
+    const themeIcon = document.getElementById('theme-icon');
+    if (themeIcon) themeIcon.className = isDark ? 'fas fa-sun text-gray-300' : 'fas fa-moon text-gray-700';
+  }
+  // Initialize theme on load
+  document.addEventListener('DOMContentLoaded', function() {
+    if (localStorage.getItem('localconnect_theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+      const themeIcon = document.getElementById('theme-icon');
+      if (themeIcon) themeIcon.className = 'fas fa-sun text-gray-300';
+    }
+  });
+  </script>
   <script>
   // Render order summary from cart
   function renderOrderSummary() {
