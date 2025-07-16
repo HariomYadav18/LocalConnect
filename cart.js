@@ -1,6 +1,6 @@
-// cart.js (rewritten from scratch)
+// cart.js (robust, modern, orange palette)
 
-// Utility: Get cart from localStorage
+// Utility: Get cart from localStorage, or empty array if unavailable
 function getCart() {
   try {
     const cart = JSON.parse(localStorage.getItem('cart'));
@@ -12,7 +12,9 @@ function getCart() {
 
 // Utility: Save cart to localStorage
 function saveCart(cart) {
-  localStorage.setItem('cart', JSON.stringify(cart));
+  try {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  } catch {}
 }
 
 // Utility: Update cart badge
@@ -36,12 +38,20 @@ function renderCartItems() {
   const taxesElem = document.getElementById('taxes');
   const checkoutBtn = document.getElementById('checkout-btn');
 
+  if (!cartBody) return;
   cartBody.innerHTML = '';
   let subtotal = 0;
   let hasValidItems = false;
 
   if (!window.shops || !Array.isArray(window.shops)) {
     cartBody.innerHTML = '<div class="text-center py-6 text-error">Shop data not loaded. Please refresh the page.</div>';
+    if (checkoutBtn) checkoutBtn.style.display = 'none';
+    return;
+  }
+
+  if (!window.localStorage) {
+    cartBody.innerHTML = '<div class="text-center py-6 text-error">LocalStorage is not available. Cart cannot be used.</div>';
+    if (checkoutBtn) checkoutBtn.style.display = 'none';
     return;
   }
 
@@ -49,12 +59,11 @@ function renderCartItems() {
     cartBody.innerHTML = `<div class="text-center py-6 text-gray-500 dark:text-gray-400">Your cart is empty.</div>`;
     if (subtotalElem) subtotalElem.textContent = '₹0';
     if (totalElem) totalElem.textContent = '₹0';
-    if (checkoutBtn) checkoutBtn.disabled = true;
+    if (checkoutBtn) checkoutBtn.style.display = 'none';
     return;
   }
 
   cart.forEach((item, index) => {
-    // Robust matching: allow string/number for shopId, and check productIndex
     const shop = window.shops.find(s => String(s.id) === String(item.shopId) || Number(s.id) === Number(item.shopId));
     const product = shop && Array.isArray(shop.products) && item.productIndex != null && shop.products[item.productIndex] ? shop.products[item.productIndex] : null;
     if (product && shop) {
@@ -130,19 +139,6 @@ function attachCartEventListeners() {
   }
 }
 
-// Wait for shops to be loaded before rendering cart
-function waitForShopsAndRender(tries = 0) {
-  if (!window.shops || !Array.isArray(window.shops)) {
-    if (tries > 30) {
-      document.getElementById('cart-items-container').innerHTML = '<div class="text-center py-6 text-error">Shop data could not be loaded. Please refresh.</div>';
-      return;
-    }
-    setTimeout(() => waitForShopsAndRender(tries + 1), 50);
-    return;
-  }
-  renderCartItems();
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-  waitForShopsAndRender();
+  renderCartItems();
 });

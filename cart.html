@@ -53,48 +53,43 @@
     }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 dark:bg-darkBg text-gray-900 dark:text-gray-100 font-sans transition-all duration-300">
 
-  <!-- Enhanced Navbar -->
-  <nav class="bg-white/95 dark:bg-darkCard/95 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-darkBorder sticky top-0 z-50">
+  <!-- Modern Navbar -->
+  <nav class="glass bg-white/95 dark:bg-darkCard/95 backdrop-blur-md shadow-lg border-b border-gray-200 dark:border-darkBorder sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
-        <!-- Logo -->
-        <div class="flex items-center space-x-3">
-          <a href="index.html" class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg">
-              <i class="fas fa-store text-white text-lg"></i>
-            </div>
-            <h1 class="text-2xl font-display font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              LocalConnect
-            </h1>
-          </a>
+        <div class="flex items-center space-x-3 group">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 animate-pulse">
+            <i class="fas fa-store text-white text-lg"></i>
+          </div>
+          <h1 class="text-2xl font-display font-bold gradient-text">
+            LocalConnect
+          </h1>
         </div>
-
-        <!-- Navigation Links -->
         <div class="hidden md:flex items-center space-x-8">
-          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
-            <i class="fas fa-home text-sm"></i>
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-all duration-300 flex items-center space-x-2 group">
+            <i class="fas fa-home text-sm group-hover:scale-110 transition-transform duration-300"></i>
             <span>Home</span>
           </a>
-          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-colors duration-200 flex items-center space-x-2">
-            <i class="fas fa-shopping-bag text-sm"></i>
-            <span>Shop More</span>
+          <a href="about.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-all duration-300 flex items-center space-x-2 group">
+            <i class="fas fa-info-circle text-sm group-hover:scale-110 transition-transform duration-300"></i>
+            <span>About</span>
+          </a>
+          <a href="contact.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-all duration-300 flex items-center space-x-2 group">
+            <i class="fas fa-envelope text-sm group-hover:scale-110 transition-transform duration-300"></i>
+            <span>Contact</span>
           </a>
         </div>
-
-        <!-- Right Side Actions -->
         <div class="flex items-center space-x-4">
-          <!-- Cart Icon with Badge -->
           <a href="cart.html" class="relative p-2 text-primary dark:text-accent">
             <i class="fas fa-shopping-cart text-xl"></i>
             <span id="cart-badge" class="absolute -top-1 -right-1 bg-error text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
           </a>
-          
-          <!-- Dark Mode Toggle -->
-          <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-100 dark:bg-darkBorder hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+          <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-100 dark:bg-darkBorder hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 hover:animate-glow">
             <i id="theme-icon" class="fas fa-moon text-gray-700 dark:text-gray-300"></i>
           </button>
         </div>
@@ -116,7 +111,6 @@
     <div class="grid lg:grid-cols-3 gap-8">
       <!-- Cart Items -->
       <div class="lg:col-span-2">
-        <!-- Add Clear Cart button above cart items -->
         <div class="flex justify-between items-center mb-4">
           <h2 class="text-xl font-semibold">Cart Items</h2>
           <button id="clear-cart-btn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl font-semibold transition-all duration-300">Clear Cart</button>
@@ -132,7 +126,6 @@
           <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Order Summary
           </h3>
-          
           <div class="space-y-3 mb-6">
             <div class="flex justify-between text-sm">
               <span class="text-gray-600 dark:text-gray-400">Subtotal</span>
@@ -153,14 +146,11 @@
               </div>
             </div>
           </div>
-
-          <!-- Proceed to Checkout as a link, only visible if cart is valid -->
           <a href="checkout.html" id="checkout-btn"
              class="w-full bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2">
             <i class="fas fa-credit-card"></i>
             <span>Proceed to Checkout</span>
           </a>
-
           <div class="mt-4 text-center">
             <a href="index.html" class="text-primary dark:text-accent hover:underline text-sm font-medium">
               Continue Shopping
@@ -169,25 +159,14 @@
         </div>
       </div>
     </div>
-
-    <!-- Remove checkout modal and related scripts -->
   </main>
 
-  <!-- Floating Action Button -->
   <button id="fab" title="Need help?" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-primary to-secondary hover:from-secondary hover:to-primary text-white rounded-full shadow-lg z-50 flex items-center justify-center transition-all duration-300 hover:scale-110">
     <i class="fas fa-comments text-xl"></i>
   </button>
 
-  <!-- Ensure all scripts use defer and correct order -->
-  <script src="shops.js" defer></script>
-  <script src="utils.js" defer></script>
-  <script src="navbar.js" defer></script>
-  <script src="theme.js" defer></script>
-  <script src="cart.js" defer></script>
-
-  <!-- Footer -->
+  <!-- Modern Footer -->
   <footer class="footer-glass text-white py-12 mt-20 relative overflow-hidden">
-    <!-- Animated Particles -->
     <span class="footer-particle" style="left:10%;bottom:18px;width:18px;height:18px;background:#FF6B35;animation-delay:0s"></span>
     <span class="footer-particle" style="left:40%;bottom:32px;width:12px;height:12px;background:#FFD23F;animation-delay:1.2s"></span>
     <span class="footer-particle" style="left:70%;bottom:24px;width:16px;height:16px;background:#F7931E;animation-delay:2.1s"></span>
@@ -212,6 +191,12 @@
       </div>
     </div>
   </footer>
-  <!-- End Modern Footer -->
+
+  <!-- Scripts: shops.js must be loaded first -->
+  <script src="shops.js" defer></script>
+  <script src="utils.js" defer></script>
+  <script src="navbar.js" defer></script>
+  <script src="theme.js" defer></script>
+  <script src="cart.js" defer></script>
 </body>
 </html>

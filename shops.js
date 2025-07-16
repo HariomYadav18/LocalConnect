@@ -1,4 +1,7 @@
-const shops = [
+// shops.js
+// Shop and product data for LocalConnect (orange palette, no localStorage dependency for shop display)
+
+window.shops = [
   {
     id: 1,
     name: "Sharma Kirana Store",
@@ -84,6 +87,4 @@ const shops = [
     ]
   }
 ];
-window.shops = shops;
-
-console.log(window.shops)
+// No localStorage or console.log here. Only window.shops is defined for use by all pages.

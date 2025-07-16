@@ -120,5 +120,26 @@
   <script src="navbar.js" defer></script>
   <script src="theme.js" defer></script>
   <script src="shop-details.js" defer></script>
+  <script>
+    // Robust shop data and URL param error handling
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!window.shops || !Array.isArray(window.shops) || window.shops.length === 0) {
+        const shopContainer = document.getElementById('shop-container');
+        if (shopContainer) {
+          shopContainer.innerHTML = '<div class="text-center py-12 text-error">No shops available. Please check back later.</div>';
+        }
+      } else {
+        // If shopId param is missing or invalid, show a clear message
+        const params = new URLSearchParams(window.location.search);
+        let id = params.get("shopId") || params.get("id") || params.get("shop");
+        if (!id || isNaN(Number(id))) {
+          const shopContainer = document.getElementById('shop-container');
+          if (shopContainer) {
+            shopContainer.innerHTML = '<div class="text-center py-12 text-error">Invalid shop link. Please return to the <a href="index.html" class="text-primary underline">homepage</a> and select a shop.</div>';
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>

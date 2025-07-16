@@ -890,11 +890,22 @@
   </footer>
   <!-- End Modern Footer -->
 
-  <!-- Scripts -->
+  <!-- Scripts: shops.js must be loaded first -->
   <script src="shops.js" defer></script>
   <script src="utils.js" defer></script>
   <script src="navbar.js" defer></script>
   <script src="theme.js" defer></script>
   <script src="index.js" defer></script>
+  <script>
+    // Robust shop display error handling
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!window.shops || !Array.isArray(window.shops) || window.shops.length === 0) {
+        const shopContainer = document.getElementById('shopContainer');
+        if (shopContainer) {
+          shopContainer.innerHTML = '<div class="text-center py-12 text-error">No shops available. Please check back later.</div>';
+        }
+      }
+    });
+  </script>
 </body>
 </html>

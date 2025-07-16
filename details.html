@@ -119,50 +119,24 @@
     </div>
   </footer>
 
-  <script>
-    const shop = JSON.parse(localStorage.getItem('selectedShop'));
-    const container = document.getElementById('shopDetails');
-    if (!shop) {
-      container.innerHTML = `
-        <div class="text-center text-gray-600 dark:text-gray-300">
-          <p>Shop data not found. Please return to <a href="index.html" class="text-primary underline">Home</a>.</p>
-        </div>
-      `;
-    } else {
-      container.innerHTML = `
-        <div class="bg-white dark:bg-darkCard shadow-lg rounded-lg overflow-hidden">
-          <img src="${shop.image}" alt="${shop.name}" class="w-full h-64 object-cover" />
-          <div class="p-6">
-            <h2 class="text-3xl font-bold text-primary dark:text-accent mb-2">${shop.name}</h2>
-            <p class="text-gray-600 dark:text-gray-300 mb-4">Best quality products delivered fresh from your local store.</p>
-            <div class="grid sm:grid-cols-2 gap-4">
-              <div>
-                <p class="font-semibold text-gray-700 dark:text-gray-200 mb-1">Category:</p>
-                <p>${shop.category}</p>
-              </div>
-              <div>
-                <p class="font-semibold text-gray-700 dark:text-gray-200 mb-1">Location:</p>
-                <p>${shop.location}</p>
-              </div>
-            </div>
-            <div class="mt-6 flex flex-wrap gap-4">
-              <a href="cart.html"
-                class="bg-primary text-white px-6 py-2 rounded-md shadow hover:bg-secondary transition animate-pulseIn">
-                Add to Cart
-              </a>
-              <a href="index.html"
-                class="bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white px-6 py-2 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition">
-                Back to Shops
-              </a>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-  </script>
   <script src="shops.js" defer></script>
   <script src="utils.js" defer></script>
   <script src="navbar.js" defer></script>
   <script src="theme.js" defer></script>
+  <script>
+    // Robust error handling for missing/invalid selected shop
+    document.addEventListener('DOMContentLoaded', function() {
+      let shop = null;
+      try {
+        shop = JSON.parse(localStorage.getItem('selectedShop'));
+      } catch {}
+      const container = document.getElementById('shopDetails');
+      if (!shop || typeof shop !== 'object' || !shop.name) {
+        if (container) {
+          container.innerHTML = `<div class='text-center text-error py-12'>Shop data not found. Please return to <a href='index.html' class='text-primary underline'>Home</a>.</div>`;
+        }
+      }
+    });
+  </script>
 </body>
 </html>
