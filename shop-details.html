@@ -121,7 +121,7 @@
   <script src="theme.js" defer></script>
   <script src="shop-details.js" defer></script>
   <script>
-    // Robust shop data and URL param error handling
+    // Robust shop data and URL param error handling (default to first shop if no ID)
     document.addEventListener('DOMContentLoaded', function() {
       if (!window.shops || !Array.isArray(window.shops) || window.shops.length === 0) {
         const shopContainer = document.getElementById('shop-container');
@@ -129,14 +129,19 @@
           shopContainer.innerHTML = '<div class="text-center py-12 text-error">No shops available. Please check back later.</div>';
         }
       } else {
-        // If shopId param is missing or invalid, show a clear message
+        // If shopId param is missing or invalid, default to first shop
         const params = new URLSearchParams(window.location.search);
         let id = params.get("shopId") || params.get("id") || params.get("shop");
+        let shopId = Number(id);
+        if (!id || isNaN(shopId)) {
+          // Default to first shop
+          shopId = window.shops[0].id;
+        }
+        // Patch the URL so reloads work as expected
         if (!id || isNaN(Number(id))) {
-          const shopContainer = document.getElementById('shop-container');
-          if (shopContainer) {
-            shopContainer.innerHTML = '<div class="text-center py-12 text-error">Invalid shop link. Please return to the <a href="index.html" class="text-primary underline">homepage</a> and select a shop.</div>';
-          }
+          const url = new URL(window.location.href);
+          url.searchParams.set('shopId', shopId);
+          window.history.replaceState({}, '', url);
         }
       }
     });
