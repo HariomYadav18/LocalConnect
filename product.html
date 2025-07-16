@@ -5,17 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Product - LocalConnect</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FF6B35',
+            secondary: '#F7931E',
+            accent: '#FFD23F',
+            muted: '#F8F9FA',
+            darkBg: '#1A1A1A',
+            darkCard: '#2D2D2D',
+            darkBorder: '#404040'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Poppins', 'system-ui', 'sans-serif']
+          },
+          animation: {
+            fadeIn: 'fadeIn 0.6s ease-out',
+            bounceIn: 'bounceIn 0.8s ease-out',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            bounceIn: {
+              '0%': { opacity: '0', transform: 'scale(0.3)' },
+              '50%': { opacity: '1', transform: 'scale(1.05)' },
+              '70%': { transform: 'scale(0.9)' },
+              '100%': { opacity: '1', transform: 'scale(1)' }
+            }
+          }
+        }
+      }
+    };
+  </script>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans">
+<body class="bg-gray-50 dark:bg-darkBg text-gray-900 dark:text-gray-100 font-sans transition-all duration-300">
 
-  <!-- Navbar -->
-  <nav class="bg-white dark:bg-gray-800 shadow px-6 py-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">LocalConnect</h1>
-    <div class="space-x-4">
-      <a href="index.html" class="hover:text-blue-600 dark:hover:text-blue-400">Home</a>
-      <a href="cart.html" class="hover:text-blue-600 dark:hover:text-blue-400">Cart</a>
-      <button onclick="toggleDarkMode()" aria-label="Toggle dark mode" class="ml-4 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-md text-sm">Toggle Mode</button>
+  <!-- Modern Navbar -->
+  <nav class="glass bg-white/95 dark:bg-darkCard/95 backdrop-blur-md shadow-lg border-b border-gray-200 dark:border-darkBorder sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-3 group">
+          <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 animate-pulse">
+            <i class="fas fa-store text-white text-lg"></i>
+          </div>
+          <h1 class="text-2xl font-display font-bold gradient-text">
+            LocalConnect
+          </h1>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-all duration-300 flex items-center space-x-2 group">
+            <i class="fas fa-home text-sm group-hover:scale-110 transition-transform duration-300"></i>
+            <span>Home</span>
+          </a>
+          <a href="about.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-all duration-300 flex items-center space-x-2 group">
+            <i class="fas fa-info-circle text-sm group-hover:scale-110 transition-transform duration-300"></i>
+            <span>About</span>
+          </a>
+          <a href="contact.html" class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent font-medium transition-all duration-300 flex items-center space-x-2 group">
+            <i class="fas fa-envelope text-sm group-hover:scale-110 transition-transform duration-300"></i>
+            <span>Contact</span>
+          </a>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="cart.html" class="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-accent transition-all duration-300 group">
+            <i class="fas fa-shopping-cart text-xl group-hover:scale-110 transition-transform duration-300"></i>
+            <span id="cart-badge" class="absolute -top-1 -right-1 bg-error text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
+          </a>
+          <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-100 dark:bg-darkBorder hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 hover:animate-glow">
+            <i id="theme-icon" class="fas fa-moon text-gray-700 dark:text-gray-300"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -23,25 +91,51 @@
     <img id="productImage" src="" alt="Product image for selected item" class="rounded-xl shadow-md transition hover:scale-105 duration-300 bg-gray-200 dark:bg-gray-700 w-full max-h-[400px] object-contain">
     
     <div>
-      <h2 id="productName" class="text-3xl font-bold text-blue-700 dark:text-blue-300 mb-2"></h2>
+      <h2 id="productName" class="text-3xl font-bold text-primary dark:text-accent mb-2"></h2>
       <p id="productDesc" class="text-lg text-gray-600 dark:text-gray-300 mb-4"></p>
-      <p id="productPrice" class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-4"></p>
+      <p id="productPrice" class="text-xl font-semibold text-primary dark:text-accent mb-4"></p>
 
       <div class="flex items-center space-x-4 mb-6">
         <label for="qty" class="text-sm">Qty:</label>
         <input id="qty" type="number" value="1" min="1" autocomplete="off" class="w-16 px-2 py-1 rounded border dark:border-gray-600 dark:bg-gray-800 dark:text-white">
       </div>
 
-      <button id="addToCartBtn" aria-label="Add to cart" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+      <button id="addToCartBtn" aria-label="Add to cart" class="bg-primary text-white px-6 py-2 rounded hover:bg-secondary transition">
         Add to Cart
       </button>
 
-      <!-- ✅ Back to Shop link -->
-      <a id="backToShop" href="#" class="mt-4 inline-block text-blue-600 underline hover:text-blue-800"></a>
+      <a id="backToShop" href="#" class="mt-4 inline-block text-primary underline hover:text-secondary"></a>
     </div>
   </main>
 
   <div id="loading" class="text-center py-12 text-gray-400 dark:text-gray-500 animate-pulse">Loading product details...</div>
+
+  <!-- Modern Footer -->
+  <footer class="footer-glass text-white py-12 mt-20 relative overflow-hidden">
+    <span class="footer-particle" style="left:10%;bottom:18px;width:18px;height:18px;background:#FF6B35;animation-delay:0s"></span>
+    <span class="footer-particle" style="left:40%;bottom:32px;width:12px;height:12px;background:#FFD23F;animation-delay:1.2s"></span>
+    <span class="footer-particle" style="left:70%;bottom:24px;width:16px;height:16px;background:#F7931E;animation-delay:2.1s"></span>
+    <span class="footer-particle" style="left:85%;bottom:12px;width:10px;height:10px;background:#2ECC71;animation-delay:2.8s"></span>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-8">
+        <div class="flex items-center space-x-3 mb-4 md:mb-0">
+          <div class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-store text-white text-2xl"></i>
+          </div>
+          <span class="text-3xl font-display font-bold footer-gradient">LocalConnect</span>
+        </div>
+        <div class="flex space-x-6">
+          <a href="https://github.com/hariomyadav18" target="_blank" rel="noopener" class="footer-social text-gray-300 hover:text-accent" aria-label="GitHub"><i class="fab fa-github text-2xl"></i></a>
+          <a href="https://www.linkedin.com/in/hariomyadav18/" target="_blank" rel="noopener" class="footer-social text-gray-300 hover:text-accent" aria-label="LinkedIn"><i class="fab fa-linkedin text-2xl"></i></a>
+          <a href="mailto:hariomydv1844@gmail.com" class="footer-social text-gray-300 hover:text-accent" aria-label="Email"><i class="fas fa-envelope text-2xl"></i></a>
+        </div>
+        <div class="text-sm text-gray-300 text-center md:text-right">
+          <div>&copy; 2025 <span class="footer-gradient font-bold">LocalConnect</span></div>
+          <div>Made with <span class="animate-pulse text-error">&#10084;&#65039;</span> by Hariom Yadav, VIT Bhopal University</div>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script src="shops.js" defer></script>
   <script src="utils.js" defer></script>
